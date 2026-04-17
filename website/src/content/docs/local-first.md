@@ -1,3 +1,8 @@
+---
+title: Why Local-First?
+description: Privacy, speed, and determinism
+---
+
 # Why Local-First?
 
 `agrepl` is built on a **local-first** philosophy. We believe that developer tools for AI agents should be fast, private, and deterministic.

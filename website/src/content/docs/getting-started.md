@@ -9,41 +9,36 @@ Get up and running with `agrepl` in minutes.
 
 ## Installation
 
-`agrepl` is written in Go. You can install it using `go install`:
+The easiest way to install `agrepl` is via our installation script:
 
 ```bash
-go install github.com/taiwrash/agrepl@latest
+curl -sSL https://raw.githubusercontent.com/taiwrash/agrepl/main/scripts/install.sh | bash
 ```
 
-Alternatively, download the pre-compiled binaries from the [Releases](https://github.com/taiwrash/agrepl/releases) page.
+Alternatively, you can build from source:
+
+```bash
+git clone https://github.com/taiwrash/agrepl
+cd agrepl
+make install
+```
 
 ## First Run: Recording a Session
 
-To start recording your agent's interactions, use the `record` command:
+To start recording your agent's interactions, simply wrap your agent's execution command with `agrepl record`:
 
 ```bash
-agrepl record --port 8080
+agrepl record -- python agent.py
 ```
 
-This starts a local proxy server. Point your AI agent's LLM client to `http://localhost:8080`. For example, if you are using OpenAI's client:
-
-```python
-import openai
-
-client = openai.OpenAI(
-    base_url="http://localhost:8080/v1",
-    api_key="sk-..." # Your real key
-)
-```
-
-As your agent runs, `agrepl` will record all requests and responses to the `.agent-replay/` directory.
+This starts a local MITM proxy, automatically trusts the local CA for the child process, and records all HTTP(S) and LLM interactions to the `.agent-replay/` directory.
 
 ## Replaying a Session
 
-Once you have recorded a run (e.g., `run-001`), you can replay it:
+Once you have recorded a run (e.g., `run-001`), you can replay it offline:
 
 ```bash
-agrepl replay run-001 --port 8080
+agrepl replay run-001 -- python agent.py
 ```
 
-Now, when your agent makes the same requests to the proxy, `agrepl` will serve the recorded responses instead of calling the live API.
+`agrepl` will serve the recorded responses instead of calling live APIs. **Zero network requests will be made.**

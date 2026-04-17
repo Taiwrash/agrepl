@@ -9,28 +9,33 @@ description: Reference for all CLI commands
 
 ## `record`
 
-Starts a recording proxy.
+Starts a recording proxy and executes your agent command.
 
 ```bash
-agrepl record [flags]
+agrepl record -- [command] [args...]
 ```
 
-- `--port`: The port to run the proxy on (default: 8080).
-- `--ca-cert`: Path to a custom CA certificate for HTTPS interception.
+Example:
+```bash
+agrepl record -- python agent.py --task "research"
+```
 
 ## `replay`
 
-Replays a previously recorded run.
+Replays a previously recorded run offline.
 
 ```bash
-agrepl replay [run-id] [flags]
+agrepl replay [run-id] -- [command] [args...]
 ```
 
-- `--port`: The port to run the replay server on (default: 8080).
+Example:
+```bash
+agrepl replay run-001 -- python agent.py
+```
 
 ## `list`
 
-Lists all recorded runs in the local workspace.
+Lists all recorded runs in the local index.
 
 ```bash
 agrepl list
@@ -38,24 +43,17 @@ agrepl list
 
 ## `diff`
 
-Compares two recorded runs.
+Compares two recorded runs to see how behavior changed.
 
 ```bash
 agrepl diff [run-a] [run-b]
 ```
 
-## `push`
+## `push` / `pull`
 
-Pushes a run to a remote storage server.
+Collaborate with teammates by syncing runs to a remote server.
 
 ```bash
 agrepl push [run-id]
-```
-
-## `pull`
-
-Pulls a run from a remote storage server.
-
-```bash
 agrepl pull [run-id]
 ```

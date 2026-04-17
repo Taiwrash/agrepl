@@ -49,11 +49,28 @@ Compares two recorded runs to see how behavior changed.
 agrepl diff [run-a] [run-b]
 ```
 
-## `push` / `pull`
+## `auth`
 
-Collaborate with teammates by syncing runs to a remote server.
+Manage your agrepl Cloud identity.
 
 ```bash
-agrepl push [run-id]
-agrepl pull [run-id]
+agrepl auth login
+agrepl auth logout
+agrepl auth status
+```
+
+## `share`
+
+Register and upload a run for team collaboration.
+
+```bash
+agrepl share [run-id]
+```
+
+## `pull`
+
+Download a shared run from your team workspace.
+
+```bash
+agrepl pull [share-id]
 ```

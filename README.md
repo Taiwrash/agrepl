@@ -33,6 +33,14 @@ agrepl replay run-001 -- python agent.py
 ```
 > **Killer Feature:** Replay works without an internet connection. No new API calls are made.
 
+### 4. Share (Team Collaboration)
+Share your run with your team for collaborative debugging.
+```bash
+agrepl auth login
+agrepl share run-001
+```
+`agrepl` will generate a unique ID. Your teammates can then use `agrepl pull [id]` to reproduce the exact failure on their machines.
+
 ## Use Cases
 - **Debug failing workflows**: Replay the exact session where your agent drifted.
 - **CI/CD Testing**: Run integration tests with guaranteed, deterministic outputs.

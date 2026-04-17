@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Login - agrepl">
+	<section class="login-page">
+		<div class="container narrow">
+			<div class="login-card spotlight">
+				<div class="card-inner">
+					<div class="icon-wrap-large">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+					</div>
+					<h1>Authenticate your device</h1>
+					<p>agrepl uses GitHub Device Flow for secure, local-first authentication. No passwords ever touch our servers.</p>
+					
+					<div class="auth-steps">
+						<div class="auth-step">
+							<div class="step-num">1</div>
+							<p>Open your terminal and run:</p>
+							<div class="code-box">
+								<code>agrepl auth login</code>
+								<button class="copy-btn-inline" data-copy="agrepl auth login">Copy</button>
+							</div>
+						</div>
+						
+						<div class="auth-step">
+							<div class="step-num">2</div>
+							<p>Copy the one-time code provided in your terminal.</p>
+						</div>
+						
+						<div class="auth-step">
+							<div class="step-num">3</div>
+							<p>Click the button below to authorize on GitHub.</p>
+							<a href="https://github.com/login/device" target="_blank" class="btn primary full-width">
+								Open GitHub Device Authorization
+							</a>
+						</div>
+					</div>
+					
+					<div class="login-footer">
+						<a href={`${import.meta.env.BASE_URL}/docs/configuration`}>Need help? View Docs</a>
+					</div>
+				</div>
+				<div class="card-bg-gradient white"></div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.login-page {
+		padding: 10rem 0 6rem;
+		min-height: 80vh;
+		display: flex;
+		align-items: center;
+	}
+	.container.narrow {
+		max-width: 500px;
+	}
+	.login-card {
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid var(--border);
+		border-radius: 0;
+		padding: 4rem;
+		position: relative;
+		overflow: hidden;
+		text-align: center;
+	}
+	.icon-wrap-large {
+		width: 64px; height: 64px;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 0;
+		display: flex; align-items: center; justify-content: center;
+		margin: 0 auto 2.5rem;
+		color: #fff;
+	}
+	.icon-wrap-large svg { width: 32px; height: 32px; }
+	
+	h1 { font-size: 2rem; margin-bottom: 1rem; }
+	p { color: var(--muted); line-height: 1.6; margin-bottom: 3rem; }
+	
+	.auth-steps {
+		text-align: left;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+	.auth-step {
+		display: flex;
+		flex-direction: column;
+		gap: 0.8rem;
+		position: relative;
+		padding-left: 3rem;
+	}
+	.step-num {
+		position: absolute;
+		left: 0; top: 0;
+		width: 24px; height: 24px;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		color: #fff;
+		font-size: 0.75rem;
+		font-family: 'JetBrains Mono', monospace;
+		display: flex; align-items: center; justify-content: center;
+	}
+	.auth-step p { margin-bottom: 0; color: #fff; font-weight: 500; font-size: 0.95rem; }
+	
+	.code-box {
+		background: #000;
+		border: 1px solid var(--border);
+		padding: 0.8rem 1.25rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.code-box code { color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+	
+	.copy-btn-inline {
+		background: transparent;
+		border: none;
+		color: var(--muted);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		cursor: pointer;
+		font-weight: 700;
+	}
+	.copy-btn-inline:hover { color: #fff; }
+	
+	.full-width { width: 100%; margin-top: 1rem; }
+	
+	.login-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+	.login-footer a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+	.login-footer a:hover { color: #fff; }
+	
+	.card-bg-gradient {
+		position: absolute; bottom: 0; right: 0;
+		width: 100%; height: 100%;
+		background: radial-gradient(circle at bottom right, rgba(255,255,255,0.03), transparent 70%);
+		z-index: 0; pointer-events: none;
+	}
+</style>
+
+<script>
+	document.querySelectorAll('.copy-btn-inline').forEach(btn => {
+		btn.addEventListener('click', () => {
+			const text = btn.getAttribute('data-copy');
+			navigator.clipboard.writeText(text);
+			const original = btn.innerText;
+			btn.innerText = 'Copied';
+			setTimeout(() => btn.innerText = original, 2000);
+		});
+	});
+</script>

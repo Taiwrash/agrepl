@@ -29,6 +29,10 @@ const { title } = Astro.props;
 				</a>
 				<div class="links">
 					<a href={`${import.meta.env.BASE_URL}/docs/introduction`}>Docs</a>
+					<a href={`${import.meta.env.BASE_URL}/pricing`}>Pricing</a>
+					<a href={`${import.meta.env.BASE_URL}/login`} class="login-btn">
+						Login
+					</a>
 					<a href="https://github.com/taiwrash/agrepl" target="_blank" class="github-link">
 						GitHub
 					</a>
@@ -93,6 +97,35 @@ const { title } = Astro.props;
 
 			wordmark.addEventListener('mouseenter', triggerEasterEgg);
 			wordmark.addEventListener('click', triggerEasterEgg);
+
+			// Copy to clipboard for code blocks
+			document.querySelectorAll('pre').forEach(pre => {
+				pre.style.position = 'relative';
+				const button = document.createElement('button');
+				button.className = 'copy-btn';
+				button.innerText = 'Copy';
+				button.style.position = 'absolute';
+				button.style.top = '0.5rem';
+				button.style.right = '0.5rem';
+				button.style.fontSize = '0.7rem';
+				button.style.padding = '0.2rem 0.5rem';
+				button.style.background = '#18181b';
+				button.style.border = '1px solid #27272a';
+				button.style.color = '#71717a';
+				button.style.cursor = 'pointer';
+				button.style.borderRadius = '0';
+				
+				button.addEventListener('click', async () => {
+					const code = pre.querySelector('code');
+					const text = code ? code.innerText : pre.innerText;
+					await navigator.clipboard.writeText(text);
+					button.innerText = 'Copied';
+					setTimeout(() => {
+						button.innerText = 'Copy';
+					}, 2000);
+				});
+				pre.appendChild(button);
+			});
 		</script>
 	</body>
 </html>
@@ -187,11 +220,26 @@ const { title } = Astro.props;
 	.links a:hover {
 		color: #fff;
 	}
+	.login-btn {
+		padding: 0.4rem 1rem;
+		border: 1px solid var(--border);
+		color: #fff !important;
+		font-size: 0.85rem !important;
+		background: transparent;
+		transition: all 0.2s !important;
+	}
+	.login-btn:hover {
+		background: #fff;
+		color: #000 !important;
+		border-color: #fff;
+	}
 	.github-link {
 		padding: 0.4rem 0.8rem;
 		background: var(--surface);
 		border: 1px solid var(--border);
 		border-radius: 0;
+		display: flex;
+		align-items: center;
 	}
 	main {
 		flex: 1;

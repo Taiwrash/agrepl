@@ -23,8 +23,14 @@ ARCH=$(uname -m)
 
 echo -e "System: ${OS}/${ARCH}"
 
+# Create temp directory
+TMP_DIR=$(mktemp -d)
+echo -e "${BLUE}Cloning repository to $TMP_DIR...${NC}"
+git clone --depth 1 https://github.com/taiwrash/agrepl "$TMP_DIR"
+
 # Build
 echo -e "Building agrepl..."
+cd "$TMP_DIR"
 go build -o agrepl main.go
 
 # Install
@@ -35,6 +41,10 @@ if [ ! -w "$INSTALL_DIR" ]; then
 else
     mv agrepl "$INSTALL_DIR/agrepl"
 fi
+
+# Cleanup
+cd - > /dev/null
+rm -rf "$TMP_DIR"
 
 echo -e "${GREEN}✓ agrepl installed successfully to $INSTALL_DIR/agrepl${NC}"
 echo -e ""

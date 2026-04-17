@@ -59,12 +59,21 @@ agrepl auth logout
 agrepl auth status
 ```
 
-## `share`
+## `pricing`
+
+Show agrepl pricing tiers and features.
+
+```bash
+agrepl pricing
+```
+
+## `share` / `push`
 
 Register and upload a run for team collaboration.
 
 ```bash
 agrepl share [run-id]
+agrepl push [run-id]
 ```
 
 ## `pull`
@@ -74,3 +83,12 @@ Download a shared run from your team workspace.
 ```bash
 agrepl pull [share-id]
 ```
+
+## `uninstall`
+
+Uninstall agrepl and optionally clear its data.
+
+```bash
+agrepl uninstall
+```
+

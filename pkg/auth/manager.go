@@ -103,9 +103,9 @@ func finalizeLogin(token string) (*Config, error) {
 	// In a real implementation, we would now call GitHub API to get user info
 	cfg := &Config{
 		AccessToken: token,
-		Email:       "github-user@example.com",
+		Email:       "user@example.com", // Generic mock email
 		TeamID:      "personal",
-		Tier:        "pro",
+		Tier:        "local", // Default to Local (Free) tier
 	}
 
 	if err := SaveConfig(cfg); err != nil {

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -16,25 +17,24 @@ var authCmd = &cobra.Command{
 
 var loginCmd = &cobra.Command{
 	Use:   "login",
-	Short: "Log in to agrepl Cloud",
+	Short: "Log in to agrepl Cloud via GitHub",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Attempting to log in to agrepl Cloud...")
-		
-		// For now, we simulate a login success for development
-		// In a real implementation, this would initiate the Device Flow
-		mockCfg := &auth.Config{
-			AccessToken: "mock-jwt-token-pro-tier",
-			Email:       "dev@example.com",
-			TeamID:      "team-id-123",
-			Tier:        "pro",
+		// In production, this would be a real Client ID for the Agrepl OAuth App
+		clientID := os.Getenv("AGREPL_GITHUB_CLIENT_ID")
+		if clientID == "" {
+			// Placeholder for demonstration
+			clientID = "Ov23lignS4D16X8p5U6K" 
 		}
 
-		if err := auth.SaveConfig(mockCfg); err != nil {
-			fmt.Fprintf(os.Stderr, "Error saving auth config: %v\n", err)
+		fmt.Println("\033[36mInitiating GitHub Login...\033[0m")
+		
+		cfg, err := auth.PerformGitHubLogin(context.Background(), clientID)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("\033[32mSuccessfully logged in as %s (%s Tier)\033[0m\n", mockCfg.Email, mockCfg.Tier)
+		fmt.Printf("\n\033[32m✓ Successfully logged in as %s (%s Tier)\033[0m\n", cfg.Email, cfg.Tier)
 	},
 }
 

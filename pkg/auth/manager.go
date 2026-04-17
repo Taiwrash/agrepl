@@ -1,10 +1,14 @@
 package auth
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/cli/oauth/device"
 )
 
 type Config struct {
@@ -63,6 +67,44 @@ func Logout() error {
 		return err
 	}
 	return os.Remove(path)
+}
+
+func PerformGitHubLogin(ctx context.Context, clientID string) (*Config, error) {
+	httpClient := http.DefaultClient
+	scopes := []string{"read:user", "user:email"}
+
+	code, err := device.RequestCode(httpClient, "https://github.com/login/device/code", clientID, scopes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request device code: %w", err)
+	}
+
+	fmt.Printf("\n\033[33m! Action Required\033[0m\n")
+	fmt.Printf("1. Copy your one-time code: \033[1;36m%s\033[0m\n", code.UserCode)
+	fmt.Printf("2. Open your browser to: \033[1;4m%s\033[0m\n", code.VerificationURI)
+	fmt.Printf("\nWaiting for authorization...\n")
+
+	accessToken, err := device.Wait(ctx, httpClient, "https://github.com/login/oauth/access_token", device.WaitOptions{
+		ClientID:   clientID,
+		DeviceCode: code,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("error waiting for user to authorize: %w", err)
+	}
+
+	// In a real implementation, we would now call GitHub API to get user info
+	// For this prototype, we'll simulate the user info after a successful OAuth.
+	cfg := &Config{
+		AccessToken: accessToken.Token,
+		Email:       "github-user@example.com",
+		TeamID:      "personal",
+		Tier:        "pro", // Grant Pro tier for GitHub auth users in this demo
+	}
+
+	if err := SaveConfig(cfg); err != nil {
+		return nil, err
+	}
+
+	return cfg, nil
 }
 
 func IsFeatureAllowed(feature string) (bool, string) {

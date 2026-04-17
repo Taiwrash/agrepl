@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cli/oauth/device"
+	"github.com/cli/oauth"
 )
 
 type Config struct {
@@ -69,35 +69,43 @@ func Logout() error {
 	return os.Remove(path)
 }
 
-func PerformGitHubLogin(ctx context.Context, clientID string) (*Config, error) {
-	httpClient := http.DefaultClient
+func PerformGitHubLogin(ctx context.Context, clientID, clientSecret string) (*Config, error) {
 	scopes := []string{"read:user", "user:email"}
 
-	code, err := device.RequestCode(httpClient, "https://github.com/login/device/code", clientID, scopes)
-	if err != nil {
-		return nil, fmt.Errorf("failed to request device code: %w", err)
+	flow := &oauth.Flow{
+		Host:         oauth.GitHubHost("https://github.com"),
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		Scopes:       scopes,
+		HTTPClient:   http.DefaultClient,
+		// If CallbackURI is provided, it tries Local Server flow first
+		CallbackURI: "http://127.0.0.1/callback",
+		// DisplayCode is called if it falls back to Device Flow
+		DisplayCode: func(code, uri string) error {
+			fmt.Printf("\n\033[33m! Action Required\033[0m\n")
+			fmt.Printf("1. Copy your one-time code: \033[1;36m%s\033[0m\n", code)
+			fmt.Printf("2. Open your browser to: \033[1;4m%s\033[0m\n", uri)
+			fmt.Printf("\nWaiting for authorization...\n")
+			return nil
+		},
 	}
 
-	fmt.Printf("\n\033[33m! Action Required\033[0m\n")
-	fmt.Printf("1. Copy your one-time code: \033[1;36m%s\033[0m\n", code.UserCode)
-	fmt.Printf("2. Open your browser to: \033[1;4m%s\033[0m\n", code.VerificationURI)
-	fmt.Printf("\nWaiting for authorization...\n")
-
-	accessToken, err := device.Wait(ctx, httpClient, "https://github.com/login/oauth/access_token", device.WaitOptions{
-		ClientID:   clientID,
-		DeviceCode: code,
-	})
+	fmt.Println("\033[36mInitiating GitHub authorization...\033[0m")
+	accessToken, err := flow.DetectFlow()
 	if err != nil {
-		return nil, fmt.Errorf("error waiting for user to authorize: %w", err)
+		return nil, fmt.Errorf("authentication failed: %w", err)
 	}
 
+	return finalizeLogin(accessToken.Token)
+}
+
+func finalizeLogin(token string) (*Config, error) {
 	// In a real implementation, we would now call GitHub API to get user info
-	// For this prototype, we'll simulate the user info after a successful OAuth.
 	cfg := &Config{
-		AccessToken: accessToken.Token,
+		AccessToken: token,
 		Email:       "github-user@example.com",
 		TeamID:      "personal",
-		Tier:        "pro", // Grant Pro tier for GitHub auth users in this demo
+		Tier:        "pro",
 	}
 
 	if err := SaveConfig(cfg); err != nil {

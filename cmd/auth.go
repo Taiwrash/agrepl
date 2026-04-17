@@ -22,15 +22,25 @@ var loginCmd = &cobra.Command{
 		// In production, this would be a real Client ID for the Agrepl OAuth App
 		clientID := os.Getenv("AGREPL_GITHUB_CLIENT_ID")
 		if clientID == "" {
-			// Placeholder for demonstration
-			clientID = "Ov23lignS4D16X8p5U6K" 
+			// Official agrepl OAuth App Client ID
+			clientID = "Ov23lizFfb1GfxDvf8Ph" 
 		}
+		clientSecret := os.Getenv("AGREPL_GITHUB_CLIENT_SECRET")
 
 		fmt.Println("\033[36mInitiating GitHub Login...\033[0m")
 		
-		cfg, err := auth.PerformGitHubLogin(context.Background(), clientID)
+		cfg, err := auth.PerformGitHubLogin(context.Background(), clientID, clientSecret)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)
+			if err.Error() == "failed to request device code: device flow not supported" {
+				fmt.Fprintf(os.Stderr, "\n\033[31mError: Device Flow is not enabled for this GitHub OAuth App.\033[0m\n")
+				fmt.Fprintf(os.Stderr, "To fix this:\n")
+				fmt.Fprintf(os.Stderr, "1. Go to your GitHub App settings (Developer Settings > OAuth Apps).\n")
+				fmt.Fprintf(os.Stderr, "2. Check the box \033[1m'Enable Device Flow'\033[0m.\n")
+				fmt.Fprintf(os.Stderr, "3. Save changes and try again.\n\n")
+				fmt.Fprintf(os.Stderr, "Current Client ID: %s\n", clientID)
+			} else {
+				fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)
+			}
 			os.Exit(1)
 		}
 

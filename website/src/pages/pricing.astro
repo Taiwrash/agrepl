@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Pricing - agrepl">
+	<section class="pricing-hero">
+		<div class="container">
+			<h1>Confidence, scaled.</h1>
+			<p class="tagline">From local debugging to production reliability. Choose the plan that fits your agent's lifecycle.</p>
+		</div>
+	</section>
+
+	<section class="pricing-grid">
+		<div class="container">
+			<div class="tiers">
+				<!-- Hobby Tier -->
+				<div class="tier hobby">
+					<div class="tier-header">
+						<h3>Local</h3>
+						<div class="price">Free</div>
+						<p>For individual developers building reliable agents.</p>
+					</div>
+					<ul class="tier-features">
+						<li>• Unlimited Local Record/Replay</li>
+						<li>• Basic Visual Diff</li>
+						<li>• MITM Proxy (HTTP/HTTPS)</li>
+						<li>• Local JSON Storage</li>
+						<li>• Community Support</li>
+					</ul>
+					<a href="/docs/getting-started" class="btn secondary">Install CLI</a>
+				</div>
+
+				<!-- Pro Tier (Full Reliability Suite) -->
+				<div class="tier pro featured">
+					<div class="featured-badge">Full Reliability Suite</div>
+					<div class="tier-header">
+						<h3>Pro</h3>
+						<div class="price">$19<span>/seat/mo</span></div>
+						<p>Collaborative debugging and regression testing for teams.</p>
+					</div>
+					<ul class="tier-features">
+						<li><strong>Everything in Local, plus:</strong></li>
+						<li>• <strong>Team Sync:</strong> Share runs via links</li>
+						<li>• <strong>agrepl test:</strong> CI/CD Integration</li>
+						<li>• <strong>Semantic Diff:</strong> LLM-powered drift analysis</li>
+						<li>• <strong>Golden Runs:</strong> Ground-truth management</li>
+						<li>• Priority Support</li>
+					</ul>
+					<a href="#" class="btn primary">Start Free Trial</a>
+				</div>
+
+				<!-- Enterprise Tier -->
+				<div class="tier enterprise">
+					<div class="tier-header">
+						<h3>Enterprise</h3>
+						<div class="price">Custom</div>
+						<p>Production guardrails and compliance for AI organizations.</p>
+					</div>
+					<ul class="tier-features">
+						<li><strong>Everything in Pro, plus:</strong></li>
+						<li>• <strong>Guardrails:</strong> Real-time cost & safety policies</li>
+						<li>• <strong>Audit Logs:</strong> Production trace history</li>
+						<li>• <strong>Self-Hosted:</strong> Private Cloud/On-Prem</li>
+						<li>• SSO & RBAC</li>
+						<li>• Custom SLA & Support</li>
+					</ul>
+					<a href="mailto:sales@agrepl.dev" class="btn secondary">Contact Sales</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="faq">
+		<div class="container">
+			<h2>Frequently Asked Questions</h2>
+			<div class="faq-list">
+				<div class="faq-item">
+					<h5>Is the CLI always free?</h5>
+					<p>Yes. Recording and replaying on your local machine is open-source and will always be free. We only charge when you move to team collaboration and production reliability features.</p>
+				</div>
+				<div class="faq-item">
+					<h5>How does Team Sync work?</h5>
+					<p>Team Sync securely uploads your local traces to the agrepl Cloud, allowing you to generate a shareable ID. Your teammates can then use `agrepl pull <id>` to reproduce the exact state on their own machine.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.pricing-hero {
+		padding: 10rem 0 4rem;
+		text-align: center;
+	}
+	h1 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; }
+	.tagline { color: var(--muted); font-size: 1.2rem; }
+
+	.pricing-grid { padding: 4rem 0 10rem; }
+	.tiers {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+		align-items: flex-start;
+	}
+	.tier {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		padding: 3rem;
+		border-radius: 24px;
+		display: flex;
+		flex-direction: column;
+		transition: transform 0.3s;
+	}
+	.tier.featured {
+		border: 1px solid #fff;
+		transform: scale(1.05);
+		position: relative;
+		box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+	}
+	.featured-badge {
+		position: absolute;
+		top: -12px;
+		left: 50%;
+		transform: translateX(-50%);
+		background: #fff;
+		color: #000;
+		padding: 4px 12px;
+		border-radius: 100px;
+		font-size: 0.7rem;
+		font-weight: 800;
+		text-transform: uppercase;
+	}
+	.tier-header h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+	.price { font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+	.price span { font-size: 1rem; color: var(--muted); }
+	.tier-features {
+		list-style: none;
+		margin: 2rem 0 3rem;
+		flex: 1;
+	}
+	.tier-features li { margin-bottom: 1rem; color: var(--muted); font-size: 0.95rem; }
+	.tier-features strong { color: #fff; }
+
+	.btn {
+		text-align: center;
+		padding: 1rem;
+		border-radius: 8px;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.btn.primary { background: #fff; color: #000; }
+	.btn.secondary { border: 1px solid var(--border); color: #fff; }
+
+	.faq { padding: 8rem 0; border-top: 1px solid var(--border); }
+	.faq h2 { text-align: center; margin-bottom: 4rem; }
+	.faq-list { max-width: 800px; margin: 0 auto; display: grid; gap: 3rem; }
+	.faq-item h5 { font-size: 1.1rem; margin-bottom: 1rem; }
+	.faq-item p { color: var(--muted); line-height: 1.6; }
+
+	@media (max-width: 900px) {
+		.tiers { grid-template-columns: 1fr; }
+		.tier.featured { transform: none; margin: 2rem 0; }
+	}
+</style>

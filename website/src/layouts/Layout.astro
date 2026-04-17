@@ -12,7 +12,7 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Deterministic Replay for AI Agents" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}/favicon.svg`} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,12 +23,12 @@ const { title } = Astro.props;
 		<div class="bg-glow"></div>
 		<nav>
 			<div class="container">
-				<a href="/" class="logo">
+				<a href={import.meta.env.BASE_URL} class="logo">
 					<span class="logo-icon"></span>
 					agrepl
 				</a>
 				<div class="links">
-					<a href="/docs/introduction">Docs</a>
+					<a href={`${import.meta.env.BASE_URL}/docs/introduction`}>Docs</a>
 					<a href="https://github.com/taiwrash/agrepl" target="_blank" class="github-link">
 						GitHub
 					</a>
@@ -60,7 +60,7 @@ const { title } = Astro.props;
 					</div>
 					<div class="footer-right">
 						<div class="footer-nav">
-							<a href="/docs/introduction">Docs</a>
+							<a href={`${import.meta.env.BASE_URL}/docs/introduction`}>Docs</a>
 							<a href="https://github.com/taiwrash/agrepl" target="_blank">GitHub</a>
 							<a href="#">Discord</a>
 						</div>

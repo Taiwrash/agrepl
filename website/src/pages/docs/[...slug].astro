@@ -23,7 +23,7 @@ const allDocs = await getCollection('docs');
 				<ul>
 					{allDocs.map(doc => (
 						<li>
-							<a href={`/docs/${doc.id}`} class={entry.id === doc.id ? 'active' : ''}>
+							<a href={`${import.meta.env.BASE_URL}/docs/${doc.id}`} class={entry.id === doc.id ? 'active' : ''}>
 								{doc.data.title}
 							</a>
 						</li>

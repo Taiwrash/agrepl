@@ -50,25 +50,67 @@ import Layout from '../layouts/Layout.astro';
 
 	<section class="how-it-works">
 		<div class="container">
-			<h2 class="section-title">Replay, don't just observe.</h2>
-			<div class="steps-grid">
-				<div class="step-card">
-					<span class="step-num">1</span>
-					<h4>Record</h4>
-					<p>Run your agent through agrepl. It captures every LLM prompt and API response.</p>
-					<div class="code-snippet">agrepl record -- python agent.py</div>
+			<div class="section-header">
+				<h2 class="section-title">Replay, don't just observe.</h2>
+				<p class="section-tagline">Three steps to deterministic debugging.</p>
+			</div>
+			
+			<div class="flow-container">
+				<div class="flow-line"></div>
+				
+				<div class="flow-step staggered">
+					<div class="step-content">
+						<div class="step-badge">Phase 01</div>
+						<h4>Capture the behavior</h4>
+						<p>Wrap any CLI command with <code>agrepl record</code>. It acts as a local bridge, intercepting LLM calls and tool interactions in real-time.</p>
+						<div class="code-window">
+							<div class="window-dot red"></div>
+							<div class="window-dot yellow"></div>
+							<div class="window-dot green"></div>
+							<div class="code-content">agrepl record -- python agent.py</div>
+						</div>
+					</div>
+					<div class="step-visual">
+						<div class="pulse-circle"></div>
+						<div class="pulse-ring"></div>
+					</div>
 				</div>
-				<div class="step-card">
-					<span class="step-num">2</span>
-					<h4>Replay</h4>
-					<p>Re-run the same command. agrepl serves recorded responses from a local trace.</p>
-					<div class="code-snippet">agrepl replay run-001 -- python agent.py</div>
+
+				<div class="flow-step staggered reverse">
+					<div class="step-content">
+						<div class="step-badge">Phase 02</div>
+						<h4>Serve from the trace</h4>
+						<p>Re-run with <code>agrepl replay</code>. Your agent thinks it's talking to the world, but it's actually pulling from a local, immutable JSON trace.</p>
+						<div class="code-window">
+							<div class="window-dot red"></div>
+							<div class="window-dot yellow"></div>
+							<div class="window-dot green"></div>
+							<div class="code-content">agrepl replay run-001 -- python agent.py</div>
+						</div>
+					</div>
+					<div class="step-visual">
+						<div class="lock-icon-visual">
+							<div class="lock-body"></div>
+							<div class="lock-shackle"></div>
+						</div>
+					</div>
 				</div>
-				<div class="step-card">
-					<span class="step-num">3</span>
-					<h4>Debug</h4>
-					<p>Same inputs. Same outputs. Zero network required. Fix bugs without burning credits.</p>
-					<div class="status-pill">Offline Mode</div>
+
+				<div class="flow-step staggered">
+					<div class="step-content">
+						<div class="step-badge">Phase 03</div>
+						<h4>Debug offline</h4>
+						<p>Fix code, tweak prompts, and re-test instantly. No network latency, no API costs, and 100% reproducibility.</p>
+						<div class="status-indicator-alt">
+							<span class="pulse-dot"></span>
+							Network Isolated
+						</div>
+					</div>
+					<div class="step-visual">
+						<div class="offline-mesh">
+							<span></span><span></span><span></span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -76,24 +118,39 @@ import Layout from '../layouts/Layout.astro';
 
 	<section class="use-cases">
 		<div class="container">
-			<div class="bento-grid">
-				<div class="bento-card spotlight">
-					<div class="card-content">
-						<h3>Debug failing <br/>agent workflows</h3>
-						<p>Stop guessing why your agent drifted. Replay the exact session where it failed and step through the logic locally.</p>
+			<h2 class="section-title small">Built for high-stakes agents</h2>
+			<div class="bento-grid-creative">
+				<div class="bento-card-glass spotlight">
+					<div class="card-inner">
+						<div class="icon-wrap">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+						</div>
+						<h3>Burn code, <br/>not credits</h3>
+						<p>Iterate on reasoning loops without hitting Gemini or OpenAI for every minor fix. Replay the same LLM response while you perfect your tool-calling logic.</p>
 					</div>
+					<div class="card-bg-gradient green"></div>
 				</div>
-				<div class="bento-card spotlight">
-					<div class="card-content">
-						<h3>Test without <br/>burning API credits</h3>
-						<p>Iterate on your agent's response handling or tool logic using recorded LLM responses. No need to hit Gemini or OpenAI for every code change.</p>
+				
+				<div class="bento-card-glass spotlight">
+					<div class="card-inner">
+						<div class="icon-wrap">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+						</div>
+						<h3>Kill the <br/>stochasticity</h3>
+						<p>Stop chasing ghosts. When a test fails in CI, replay the exact run that broke. Determinism is the only way to build production-grade AI.</p>
 					</div>
+					<div class="card-bg-gradient blue"></div>
 				</div>
-				<div class="bento-card spotlight">
-					<div class="card-content">
-						<h3>Reproduce prod <br/>bugs locally</h3>
-						<p>Pull a recording from a failed production run and replay it in your dev environment with 100% fidelity.</p>
+
+				<div class="bento-card-glass spotlight">
+					<div class="card-inner">
+						<div class="icon-wrap">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+						</div>
+						<h3>Privacy-Locked <br/>by Default</h3>
+						<p>Sensitive PII and proprietary prompts never leave your local environment. agrepl is a tool for developers who take security seriously.</p>
 					</div>
+					<div class="card-bg-gradient white"></div>
 				</div>
 			</div>
 		</div>
@@ -389,130 +446,205 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	.how-it-works {
-		padding: 10rem 0;
-		background: radial-gradient(40% 50% at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-		border-top: 1px solid var(--border);
-		border-bottom: 1px solid var(--border);
-	}
-	.section-title {
-		text-align: center;
-		font-size: 3rem;
-		font-weight: 900;
-		margin-bottom: 6rem;
-		letter-spacing: -0.04em;
-	}
-	.steps-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 4rem;
-	}
-	.step-card {
+		padding: 12rem 0;
+		background: #000;
 		position: relative;
-		transition: transform 0.3s ease;
+		overflow: hidden;
 	}
-	.step-card:hover {
-		transform: translateY(-5px);
+	.section-header {
+		text-align: center;
+		margin-bottom: 8rem;
 	}
-	.step-num {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 5rem;
-		font-weight: 900;
-		color: rgba(255, 255, 255, 0.05);
+	.section-tagline {
+		color: var(--muted);
+		font-size: 1.1rem;
+		margin-top: 1rem;
+	}
+	.flow-container {
+		position: relative;
+		max-width: 900px;
+		margin: 0 auto;
+	}
+	.flow-line {
 		position: absolute;
-		top: -2.5rem; left: -1rem;
-		line-height: 1;
+		top: 0; left: 50%;
+		width: 1px; height: 100%;
+		background: linear-gradient(to bottom, transparent, var(--border), var(--border), transparent);
 		z-index: 0;
 	}
-	.step-card h4 {
-		font-size: 1.6rem;
-		font-weight: 800;
-		margin-bottom: 1.25rem;
+	.flow-step {
+		display: flex;
+		align-items: center;
+		gap: 6rem;
+		margin-bottom: 10rem;
 		position: relative;
 		z-index: 1;
 	}
-	.step-card p {
-		color: var(--muted);
-		margin-bottom: 2rem;
-		line-height: 1.7;
-		font-size: 1.05rem;
+	.flow-step.reverse {
+		flex-direction: row-reverse;
+	}
+	.step-content {
+		flex: 1;
+	}
+	.step-visual {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		position: relative;
-		z-index: 1;
 	}
-	.code-snippet {
-		background: #000;
-		padding: 1rem;
-		border-radius: 8px;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 0.75rem;
-		color: #eee;
-		border: 1px solid var(--border);
-		white-space: nowrap;
-		overflow-x: auto;
-		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-	}
-	.status-pill {
+	.step-badge {
 		display: inline-block;
 		background: rgba(255, 255, 255, 0.05);
-		padding: 0.4rem 1rem;
+		padding: 0.3rem 0.8rem;
 		border-radius: 100px;
-		font-size: 0.75rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.7rem;
+		color: #fff;
+		margin-bottom: 1.5rem;
+		border: 1px solid var(--border);
+	}
+	.step-content h4 {
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin-bottom: 1rem;
+	}
+	.step-content p {
+		color: var(--muted);
+		line-height: 1.7;
+		font-size: 1rem;
+		margin-bottom: 2rem;
+	}
+	.code-window {
+		background: #050505;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		padding: 1.25rem;
+		position: relative;
+		box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+	}
+	.window-dot {
+		width: 8px; height: 8px;
+		border-radius: 50%;
+		display: inline-block;
+		margin-right: 4px;
+		margin-bottom: 1rem;
+	}
+	.window-dot.red { background: #ff5f56; }
+	.window-dot.yellow { background: #ffbd2e; }
+	.window-dot.green { background: #27c93f; }
+	.code-content {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.8rem;
 		color: #fff;
 	}
 
-	.use-cases {
-		padding: 8rem 0 12rem;
+	/* Visual Elements */
+	.pulse-circle {
+		width: 60px; height: 60px;
+		background: #fff;
+		border-radius: 50%;
+		box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
 	}
-	.bento-grid {
+	.pulse-ring {
+		position: absolute;
+		width: 100px; height: 100px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 50%;
+		animation: ringPulse 2s infinite;
+	}
+	@keyframes ringPulse {
+		0% { transform: scale(1); opacity: 0.5; }
+		100% { transform: scale(2); opacity: 0; }
+	}
+
+	.lock-icon-visual {
+		width: 80px; height: 100px;
+		display: flex; flex-direction: column; align-items: center;
+	}
+	.lock-body { width: 60px; height: 50px; background: #27272a; border-radius: 8px; }
+	.lock-shackle { width: 40px; height: 40px; border: 4px solid #fff; border-bottom: none; border-radius: 20px 20px 0 0; margin-bottom: -10px; }
+
+	.offline-mesh {
+		display: flex; gap: 10px;
+	}
+	.offline-mesh span {
+		width: 12px; height: 40px; background: #fff; border-radius: 6px;
+		animation: meshBounce 1.5s infinite ease-in-out;
+	}
+	.offline-mesh span:nth-child(2) { animation-delay: 0.2s; }
+	.offline-mesh span:nth-child(3) { animation-delay: 0.4s; }
+	@keyframes meshBounce {
+		0%, 100% { height: 40px; opacity: 1; }
+		50% { height: 20px; opacity: 0.3; }
+	}
+
+	.status-indicator-alt {
+		display: flex; align-items: center; gap: 0.6rem;
+		font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #fff;
+	}
+	.pulse-dot { width: 6px; height: 6px; background: #27c93f; border-radius: 50%; animation: blink 1s infinite; }
+
+	/* Use Cases Creative */
+	.bento-grid-creative {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
+		margin-top: 5rem;
 	}
-	.bento-card {
-		background: var(--surface);
-		border-radius: 24px;
+	.bento-card-glass {
+		background: rgba(255, 255, 255, 0.02);
 		border: 1px solid var(--border);
-		padding: 2.5rem;
+		border-radius: 24px;
+		padding: 3rem;
 		position: relative;
 		overflow: hidden;
-		transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.4s;
-		min-height: 280px;
+		transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+		min-height: 380px;
 	}
-	.bento-card:hover {
-		transform: translateY(-8px);
-		border-color: var(--border-hover);
+	.bento-card-glass:hover {
+		transform: translateY(-10px);
+		border-color: rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.04);
 	}
-	.spotlight::before {
-		content: "";
-		position: absolute;
-		top: 0; left: 0;
+	.card-inner { position: relative; z-index: 2; }
+	.icon-wrap {
+		width: 48px; height: 48px;
+		background: rgba(255, 255, 255, 0.05);
+		border-radius: 12px;
+		display: flex; align-items: center; justify-content: center;
+		margin-bottom: 2.5rem;
+		color: #fff;
+	}
+	.icon-wrap svg { width: 24px; height: 24px; }
+	.bento-card-glass h3 {
+		font-size: 1.8rem; font-weight: 800; margin-bottom: 1.2rem; line-height: 1.1;
+	}
+	.bento-card-glass p {
+		color: var(--muted); line-height: 1.6; font-size: 0.95rem;
+	}
+	.card-bg-gradient {
+		position: absolute; bottom: 0; right: 0;
 		width: 100%; height: 100%;
-		background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
-		opacity: 0;
-		transition: opacity 0.5s;
-		pointer-events: none;
+		background: radial-gradient(circle at bottom right, rgba(255,255,255,0.05), transparent 60%);
+		z-index: 0; pointer-events: none;
 	}
-	.spotlight:hover::before {
-		opacity: 1;
-	}
-	.card-content h3 {
-		font-size: 1.5rem;
-		line-height: 1.2;
-		margin-bottom: 1.2rem;
-		font-weight: 800;
-	}
-	.card-content p {
-		color: var(--muted);
-		line-height: 1.6;
-		font-size: 0.95rem;
-	}
+	.card-bg-gradient.green { background: radial-gradient(circle at bottom right, rgba(39, 201, 63, 0.05), transparent 60%); }
+	.card-bg-gradient.blue { background: radial-gradient(circle at bottom right, rgba(0, 102, 255, 0.05), transparent 60%); }
+
+	.section-title.small { font-size: 2.2rem; text-align: center; }
 
 	@media (max-width: 900px) {
-		.steps-grid { grid-template-columns: 1fr; }
-		.bento-grid { grid-template-columns: 1fr; }
+		.flow-step, .flow-step.reverse { flex-direction: column; gap: 3rem; text-align: center; }
+		.flow-line { display: none; }
+		.bento-grid-creative { grid-template-columns: 1fr; }
+		.step-visual { order: -1; }
 		.glass-terminal { transform: none !important; animation: none; }
 		.value-bullets { flex-direction: column; gap: 1rem; }
+	}
+	.bento-card-glass:hover .icon-wrap {
+		color: #fff;
+		border-color: rgba(255,255,255,0.3);
+		background: rgba(255,255,255,0.1);
 	}
 </style>

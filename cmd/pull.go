@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"agrepl/pkg/auth"
 	"agrepl/pkg/core"
 	"agrepl/pkg/storage"
 
@@ -22,6 +23,15 @@ var pullCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		runID := args[0]
+
+		// Check if Team Sync is allowed for the current tier
+		allowed, tier := auth.IsFeatureAllowed("team_sync")
+		if !allowed {
+			fmt.Printf("\033[33mThe 'pull' command (Team Sync) is a Pro feature.\033[0m\n")
+			fmt.Printf("Your current tier is: \033[1m%s\033[0m\n", tier)
+			fmt.Println("Please upgrade to Pro at https://agrepl.dev/pricing to share runs with your team.")
+			os.Exit(1)
+		}
 
 		rs, err := storage.NewRemoteStorage()
 		if err != nil {

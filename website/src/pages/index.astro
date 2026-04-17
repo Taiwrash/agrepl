@@ -90,8 +90,10 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<div class="step-visual">
 						<div class="lock-icon-visual">
-							<div class="lock-body"></div>
 							<div class="lock-shackle"></div>
+							<div class="lock-body">
+								<div class="lock-scanner"></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -270,7 +272,7 @@ import Layout from '../layouts/Layout.astro';
 		padding: 0.5rem 1rem;
 		background: rgba(255, 255, 255, 0.05);
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 100px;
+		border-radius: 0;
 		color: #fff;
 		font-size: 0.8rem;
 		font-weight: 600;
@@ -302,7 +304,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 	.btn {
 		padding: 0.8rem 2rem;
-		border-radius: 8px;
+		border-radius: 0;
 		font-weight: 600;
 		text-decoration: none;
 		transition: all 0.2s;
@@ -337,7 +339,7 @@ import Layout from '../layouts/Layout.astro';
 	.glass-terminal {
 		background: rgba(10, 10, 10, 0.6);
 		border: 1px solid rgba(255, 255, 255, 0.05);
-		border-radius: 16px;
+		border-radius: 0;
 		overflow: hidden;
 		box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(12px);
@@ -378,7 +380,7 @@ import Layout from '../layouts/Layout.astro';
 	.dot {
 		width: 10px;
 		height: 10px;
-		border-radius: 50%;
+		border-radius: 0;
 		background: #fff;
 	}
 	.dot.muted { opacity: 0.15; }
@@ -395,7 +397,7 @@ import Layout from '../layouts/Layout.astro';
 		border: 1px solid var(--border);
 		color: #fff;
 		padding: 0.4rem 0.8rem;
-		border-radius: 4px;
+		border-radius: 0;
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.7rem;
 		cursor: pointer;
@@ -497,7 +499,7 @@ import Layout from '../layouts/Layout.astro';
 		display: inline-block;
 		background: rgba(255, 255, 255, 0.05);
 		padding: 0.3rem 0.8rem;
-		border-radius: 100px;
+		border-radius: 0;
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.7rem;
 		color: #fff;
@@ -518,14 +520,14 @@ import Layout from '../layouts/Layout.astro';
 	.code-window {
 		background: #050505;
 		border: 1px solid var(--border);
-		border-radius: 10px;
+		border-radius: 0;
 		padding: 1.25rem;
 		position: relative;
 		box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 	}
 	.window-dot {
 		width: 8px; height: 8px;
-		border-radius: 50%;
+		border-radius: 0;
 		display: inline-block;
 		margin-right: 4px;
 		margin-bottom: 1rem;
@@ -543,7 +545,7 @@ import Layout from '../layouts/Layout.astro';
 	.pulse-circle {
 		width: 60px; height: 60px;
 		background: #fff;
-		border-radius: 50%;
+		border-radius: 0;
 		box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
 	}
 	.pulse-ring {
@@ -561,15 +563,52 @@ import Layout from '../layouts/Layout.astro';
 	.lock-icon-visual {
 		width: 80px; height: 100px;
 		display: flex; flex-direction: column; align-items: center;
+		position: relative;
 	}
-	.lock-body { width: 60px; height: 50px; background: #27272a; border-radius: 8px; }
-	.lock-shackle { width: 40px; height: 40px; border: 4px solid #fff; border-bottom: none; border-radius: 20px 20px 0 0; margin-bottom: -10px; }
+	.lock-body { 
+		width: 60px; 
+		height: 45px; 
+		background: #18181b; 
+		border: 1px solid var(--border);
+		border-radius: 0; 
+		position: relative;
+		overflow: hidden;
+		box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+	}
+	.lock-scanner {
+		position: absolute;
+		top: -100%;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+		animation: lockScan 2s infinite ease-in-out;
+	}
+	@keyframes lockScan {
+		0% { top: -100%; }
+		50% { top: 100%; }
+		100% { top: 100%; }
+	}
+	.lock-shackle { 
+		width: 32px; 
+		height: 35px; 
+		border: 4px solid #fff; 
+		border-bottom: none; 
+		border-radius: 16px 16px 0 0; 
+		margin-bottom: -4px; 
+		transition: transform 0.3s;
+		animation: shackleLock 4s infinite ease-in-out;
+	}
+	@keyframes shackleLock {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(8px); }
+	}
 
 	.offline-mesh {
 		display: flex; gap: 10px;
 	}
 	.offline-mesh span {
-		width: 12px; height: 40px; background: #fff; border-radius: 6px;
+		width: 12px; height: 40px; background: #fff; border-radius: 0;
 		animation: meshBounce 1.5s infinite ease-in-out;
 	}
 	.offline-mesh span:nth-child(2) { animation-delay: 0.2s; }
@@ -583,7 +622,7 @@ import Layout from '../layouts/Layout.astro';
 		display: flex; align-items: center; gap: 0.6rem;
 		font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #fff;
 	}
-	.pulse-dot { width: 6px; height: 6px; background: #27c93f; border-radius: 50%; animation: blink 1s infinite; }
+	.pulse-dot { border-radius: 50%; animation: blink 1s infinite; }
 
 	/* Use Cases Creative */
 	.bento-grid-creative {
@@ -595,7 +634,7 @@ import Layout from '../layouts/Layout.astro';
 	.bento-card-glass {
 		background: rgba(255, 255, 255, 0.02);
 		border: 1px solid var(--border);
-		border-radius: 24px;
+		border-radius: 0;
 		padding: 3rem;
 		position: relative;
 		overflow: hidden;
@@ -612,7 +651,7 @@ import Layout from '../layouts/Layout.astro';
 		width: 48px; height: 48px;
 		background: rgba(255, 255, 255, 0.03);
 		border: 1px solid rgba(255, 255, 255, 0.08);
-		border-radius: 12px;
+		border-radius: 0;
 		display: flex; align-items: center; justify-content: center;
 		margin-bottom: 2.5rem;
 		color: #fff;
@@ -650,3 +689,14 @@ import Layout from '../layouts/Layout.astro';
 		background: rgba(255,255,255,0.1);
 	}
 </style>
+
+
+
+
+
+style>
+
+
+
+
+

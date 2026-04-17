@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"agrepl/pkg/auth"
 	"agrepl/pkg/storage"
 
 	"github.com/spf13/cobra"
@@ -19,6 +20,15 @@ var pushCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		runID := args[0]
+
+		// Check if Team Sync is allowed for the current tier
+		allowed, tier := auth.IsFeatureAllowed("team_sync")
+		if !allowed {
+			fmt.Printf("\033[33mThe 'push' command (Team Sync) is a Pro feature.\033[0m\n")
+			fmt.Printf("Your current tier is: \033[1m%s\033[0m\n", tier)
+			fmt.Println("Please upgrade to Pro at https://agrepl.dev/pricing to share runs with your team.")
+			os.Exit(1)
+		}
 
 		// Load local file directly as bytes to avoid unnecessary unmarshal/marshal
 		filePath := filepath.Join(".agent-replay", "runs", fmt.Sprintf("%s.json", runID))

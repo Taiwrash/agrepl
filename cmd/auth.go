@@ -26,6 +26,7 @@ var loginCmd = &cobra.Command{
 			AccessToken: "mock-jwt-token-pro-tier",
 			Email:       "dev@example.com",
 			TeamID:      "team-id-123",
+			Tier:        "pro",
 		}
 
 		if err := auth.SaveConfig(mockCfg); err != nil {
@@ -33,7 +34,7 @@ var loginCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Printf("\033[32mSuccessfully logged in as %s (Pro Tier)\033[0m\n", mockCfg.Email)
+		fmt.Printf("\033[32mSuccessfully logged in as %s (%s Tier)\033[0m\n", mockCfg.Email, mockCfg.Tier)
 	},
 }
 
@@ -59,6 +60,7 @@ var statusCmd = &cobra.Command{
 			return
 		}
 		fmt.Printf("\033[32mStatus: Logged in as %s\033[0m\n", cfg.Email)
+		fmt.Printf("Tier: %s\n", cfg.Tier)
 		fmt.Printf("Team ID: %s\n", cfg.TeamID)
 	},
 }

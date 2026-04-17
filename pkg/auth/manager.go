@@ -11,6 +11,7 @@ type Config struct {
 	AccessToken string `json:"access_token"`
 	Email       string `json:"email"`
 	TeamID      string `json:"team_id"`
+	Tier        string `json:"tier"` // "local", "pro", "enterprise"
 }
 
 func GetConfigPath() (string, error) {
@@ -62,4 +63,44 @@ func Logout() error {
 		return err
 	}
 	return os.Remove(path)
+}
+
+func IsFeatureAllowed(feature string) (bool, string) {
+	cfg, err := LoadConfig()
+	if err != nil {
+		// Not logged in, only "local" features allowed
+		if feature == "local_record" || feature == "local_replay" {
+			return true, "local"
+		}
+		return false, "local"
+	}
+
+	switch cfg.Tier {
+	case "enterprise":
+		// Enterprise has everything
+		return true, "enterprise"
+	case "pro":
+		// Pro has everything except enterprise-only features
+		enterpriseOnly := map[string]bool{
+			"guardrails": true,
+			"audit_logs": true,
+			"sso":        true,
+		}
+		if enterpriseOnly[feature] {
+			return false, "pro"
+		}
+		return true, "pro"
+	case "local":
+		fallthrough
+	default:
+		// Local only has local features
+		localFeatures := map[string]bool{
+			"local_record": true,
+			"local_replay": true,
+		}
+		if localFeatures[feature] {
+			return true, "local"
+		}
+		return false, "local"
+	}
 }

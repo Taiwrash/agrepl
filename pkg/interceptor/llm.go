@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"sync"
 
+	"agrepl/pkg/auth"
 	"agrepl/pkg/core"
 	"agrepl/pkg/storage"
 
@@ -37,6 +38,11 @@ func NewLLMInterceptor(client *genai.Client, modelName string, mode Mode, s stor
 
 // GenerateContent intercepts the genai.Models.GenerateContent call.
 func (i *LLMInterceptor) GenerateContent(ctx context.Context, contents []*genai.Content, cfg *genai.GenerateContentConfig) (*genai.GenerateContentResponse, error) {
+	// Apply Enterprise Guardrails if applicable
+	if err := i.checkGuardrails(ctx, contents); err != nil {
+		return nil, err
+	}
+
 	switch i.Mode {
 	case ModeRecord:
 		return i.recordGenerateContent(ctx, contents, cfg)
@@ -47,6 +53,28 @@ func (i *LLMInterceptor) GenerateContent(ctx context.Context, contents []*genai.
 	default:
 		return i.Client.Models.GenerateContent(ctx, i.ModelName, contents, cfg)
 	}
+}
+
+func (i *LLMInterceptor) checkGuardrails(ctx context.Context, contents []*genai.Content) error {
+	allowed, tier := auth.IsFeatureAllowed("guardrails")
+	if !allowed {
+		return nil
+	}
+
+	// Mock Enterprise Guardrail Logic
+	fmt.Printf("%s[GUARDRAILS]%s Applying Enterprise policies for %s tier...\n", colorCyan, colorReset, tier)
+	totalLen := 0
+	for _, c := range contents {
+		for _, p := range c.Parts {
+			totalLen += len(p.Text)
+		}
+	}
+
+	if totalLen > 10000 {
+		return fmt.Errorf("guardrails blocked request: total input length %d exceeds Enterprise policy limit (10000)", totalLen)
+	}
+
+	return nil
 }
 
 func (i *LLMInterceptor) recordGenerateContent(ctx context.Context, contents []*genai.Content, cfg *genai.GenerateContentConfig) (*genai.GenerateContentResponse, error) {

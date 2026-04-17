@@ -1,0 +1,18 @@
+BINARY_NAME=agrepl
+
+all: build
+
+build:
+	go build -o $(BINARY_NAME) main.go
+
+install: build
+	mv $(BINARY_NAME) /usr/local/bin/
+
+clean:
+	rm -f $(BINARY_NAME)
+	rm -rf .agent-replay/ca/
+
+test:
+	go test ./...
+
+.PHONY: all build install clean test

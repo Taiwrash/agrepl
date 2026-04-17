@@ -1,0 +1,11 @@
+# Binary
+agrepl
+
+# Local traces and CA
+.agent-replay/
+
+# OS files
+.DS_Store
+
+# Go dependencies (optional but common)
+# vendor/

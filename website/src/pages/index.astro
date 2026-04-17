@@ -1,0 +1,504 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="agrepl - Debug AI agents with deterministic replay">
+	<section class="hero">
+		<div class="container">
+			<div class="badge">Deterministic Debugging</div>
+			<h1>Debug AI agents with <br/><span class="white-glow">deterministic replay</span></h1>
+			<p class="tagline">Record LLM and API interactions. Replay them offline with zero network calls. Reproduce any agent run instantly.</p>
+			
+			<div class="value-bullets">
+				<span>• Reproduce any agent run</span>
+				<span>• Debug without hitting APIs</span>
+				<span>• Works with any CLI tool (Python, Node, curl)</span>
+			</div>
+
+			<div class="ctas">
+				<a href="/docs/getting-started" class="btn primary">Get Started (30s)</a>
+				<a href="/docs/introduction" class="btn secondary">View Docs</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="demo">
+		<div class="container">
+			<div class="terminal-perspective">
+				<div class="glass-terminal" id="terminal">
+					<div class="scanline"></div>
+					<div class="terminal-header">
+						<div class="dots">
+							<span class="dot white"></span>
+							<span class="dot white muted"></span>
+							<span class="dot white muted"></span>
+						</div>
+						<div class="terminal-title">agrepl — deterministic replay</div>
+						<button id="run-button" class="run-btn">
+							<span class="play-icon"></span>
+							Run Simulation
+						</button>
+					</div>
+					<div class="terminal-body" id="terminal-body">
+						<!-- Content populated by script -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="how-it-works">
+		<div class="container">
+			<h2 class="section-title">Replay, don't just observe.</h2>
+			<div class="steps-grid">
+				<div class="step-card">
+					<span class="step-num">1</span>
+					<h4>Record</h4>
+					<p>Run your agent through agrepl. It captures every LLM prompt and API response.</p>
+					<div class="code-snippet">agrepl record -- python agent.py</div>
+				</div>
+				<div class="step-card">
+					<span class="step-num">2</span>
+					<h4>Replay</h4>
+					<p>Re-run the same command. agrepl serves recorded responses from a local trace.</p>
+					<div class="code-snippet">agrepl replay run-001 -- python agent.py</div>
+				</div>
+				<div class="step-card">
+					<span class="step-num">3</span>
+					<h4>Debug</h4>
+					<p>Same inputs. Same outputs. Zero network required. Fix bugs without burning credits.</p>
+					<div class="status-pill">Offline Mode</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="use-cases">
+		<div class="container">
+			<div class="bento-grid">
+				<div class="bento-card spotlight">
+					<div class="card-content">
+						<h3>Debug failing <br/>agent workflows</h3>
+						<p>Stop guessing why your agent drifted. Replay the exact session where it failed and step through the logic locally.</p>
+					</div>
+				</div>
+				<div class="bento-card spotlight">
+					<div class="card-content">
+						<h3>Test without <br/>burning API credits</h3>
+						<p>Iterate on your agent's response handling or tool logic using recorded LLM responses. No need to hit Gemini or OpenAI for every code change.</p>
+					</div>
+				</div>
+				<div class="bento-card spotlight">
+					<div class="card-content">
+						<h3>Reproduce prod <br/>bugs locally</h3>
+						<p>Pull a recording from a failed production run and replay it in your dev environment with 100% fidelity.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<script>
+	const script = [
+		{
+			command: "agrepl record --command 'python agent.py'",
+			output: [
+				"[INFO] Proxy server listening on :8000",
+				"[INFO] Root CA trusted for child process",
+				"[RECORD] Captured LLM: gemini-2.0-flash (HTTPS)",
+				"[RECORD] Captured HTTP: GET https://api.github.com/repos/google/agrepl",
+				"[INFO] Run saved to .agent-replay/runs/run-001.json",
+				"[SUCCESS] 12 steps captured locally."
+			]
+		},
+		{
+			command: "agrepl replay run-001 --command 'python agent.py'",
+			output: [
+				"[INFO] Replaying session run-001 (OFFLINE MODE)...",
+				"[REPLAY] Matched LLM call: gemini-2.0-flash",
+				"[REPLAY] Matched HTTP: GET https://api.github.com/repos/google/agrepl",
+				"[SUCCESS] Replay complete. Zero network requests made."
+			]
+		}
+	];
+
+	const terminalBody = document.getElementById('terminal-body');
+	const runButton = document.getElementById('run-button');
+	let isRunning = false;
+
+	async function typeLine(text, type = 'output', delay = 20) {
+		const line = document.createElement('div');
+		line.className = `line ${type}`;
+		if (type === 'prompt') {
+			line.innerHTML = `<span class="prompt">$</span> <span class="command-text"></span>`;
+			terminalBody.appendChild(line);
+			const commandSpan = line.querySelector('.command-text');
+			for (let i = 0; i < text.length; i++) {
+				commandSpan.textContent += text[i];
+				await new Promise(r => setTimeout(r, delay));
+			}
+		} else {
+			line.textContent = text;
+			terminalBody.appendChild(line);
+			await new Promise(r => setTimeout(r, delay * 2));
+		}
+		terminalBody.scrollTop = terminalBody.scrollHeight;
+	}
+
+	async function runSimulation() {
+		if (isRunning) return;
+		isRunning = true;
+		runButton.disabled = true;
+		runButton.classList.add('loading');
+		terminalBody.innerHTML = '';
+
+		for (const step of script) {
+			await typeLine(step.command, 'prompt', 40);
+			await new Promise(r => setTimeout(r, 400));
+			for (const line of step.output) {
+				let type = 'info';
+				if (line.startsWith('[SUCCESS]')) type = 'success-text';
+				if (line.startsWith('[RECORD]') || line.startsWith('[REPLAY]')) type = 'accent-text';
+				await typeLine(line, type, 10);
+			}
+			await new Promise(r => setTimeout(r, 1000));
+		}
+
+		await typeLine('', 'prompt', 0);
+		const finalLine = terminalBody.lastElementChild;
+		finalLine.querySelector('.command-text').innerHTML = '<span class="cursor"></span>';
+		
+		isRunning = false;
+		runButton.disabled = false;
+		runButton.classList.remove('loading');
+	}
+
+	runButton.addEventListener('click', runSimulation);
+
+	// Spotlight Effect
+	document.querySelectorAll('.spotlight').forEach(card => {
+		card.addEventListener('mousemove', e => {
+			const rect = card.getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+			card.style.setProperty('--mouse-x', `${x}px`);
+			card.style.setProperty('--mouse-y', `${y}px`);
+		});
+	});
+
+	// Initial run
+	window.addEventListener('load', () => {
+		setTimeout(runSimulation, 1000);
+	});
+</script>
+
+<style>
+	.hero {
+		padding: 10rem 0 4rem;
+		text-align: center;
+		position: relative;
+	}
+	.value-bullets {
+		display: flex;
+		gap: 2rem;
+		justify-content: center;
+		margin: 2rem 0 3rem;
+		color: var(--muted);
+		font-size: 0.9rem;
+	}
+	.badge {
+		display: inline-block;
+		padding: 0.5rem 1rem;
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 100px;
+		color: #fff;
+		font-size: 0.8rem;
+		font-weight: 600;
+		margin-bottom: 2rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+	h1 {
+		font-size: clamp(2.5rem, 8vw, 4.5rem);
+		font-weight: 900;
+		line-height: 1.05;
+		margin-bottom: 1.5rem;
+		letter-spacing: -0.04em;
+	}
+	.white-glow {
+		text-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+	}
+	.tagline {
+		font-size: 1.25rem;
+		color: var(--muted);
+		max-width: 700px;
+		margin: 0 auto;
+		line-height: 1.5;
+	}
+	.ctas {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+	}
+	.btn {
+		padding: 0.8rem 2rem;
+		border-radius: 8px;
+		font-weight: 600;
+		text-decoration: none;
+		transition: all 0.2s;
+		font-size: 0.95rem;
+	}
+	.btn.primary {
+		background: #fff;
+		color: #000;
+	}
+	.btn.primary:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+	}
+	.btn.secondary {
+		background: var(--surface);
+		color: #fff;
+		border: 1px solid var(--border);
+	}
+	.btn.secondary:hover {
+		border-color: var(--border-hover);
+	}
+
+	.demo {
+		padding: 2rem 0 10rem;
+	}
+	.terminal-perspective {
+		perspective: 1200px;
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+	}
+	.glass-terminal {
+		background: rgba(10, 10, 10, 0.6);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		border-radius: 16px;
+		overflow: hidden;
+		box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(12px);
+		transform: rotateX(8deg) rotateY(-6deg);
+		animation: float 6s ease-in-out infinite;
+		position: relative;
+		min-height: 380px;
+	}
+	@keyframes float {
+		0%, 100% { transform: rotateX(8deg) rotateY(-6deg) translateY(0); }
+		50% { transform: rotateX(10deg) rotateY(-8deg) translateY(-15px); }
+	}
+
+	.scanline {
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+		background-size: 100% 2px, 3px 100%;
+		position: absolute;
+		top: 0; left: 0;
+		pointer-events: none;
+		opacity: 0.1;
+	}
+
+	.terminal-header {
+		background: rgba(255, 255, 255, 0.03);
+		padding: 1rem 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	}
+	.dots {
+		display: flex;
+		gap: 8px;
+	}
+	.dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: #fff;
+	}
+	.dot.muted { opacity: 0.15; }
+	
+	.terminal-title {
+		font-size: 0.75rem;
+		color: #555;
+		font-family: 'JetBrains Mono', monospace;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+	.run-btn {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		color: #fff;
+		padding: 0.4rem 0.8rem;
+		border-radius: 4px;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.7rem;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		transition: all 0.2s;
+	}
+	.run-btn:hover:not(:disabled) {
+		background: var(--border);
+	}
+	.play-icon {
+		width: 0;
+		height: 0;
+		border-top: 4px solid transparent;
+		border-bottom: 4px solid transparent;
+		border-left: 6px solid #fff;
+	}
+
+	.terminal-body {
+		padding: 2.5rem;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.9rem;
+		line-height: 1.6;
+		color: #a1a1aa;
+	}
+	.line { margin-bottom: 0.4rem; }
+	.prompt {
+		color: #fff;
+		font-weight: 700;
+		margin-right: 0.8rem;
+	}
+	.info { color: #52525b; }
+	.success-text { color: #fff; font-weight: 600; }
+	.accent-text { color: #d4d4d8; }
+	.cursor {
+		display: inline-block;
+		width: 8px;
+		height: 18px;
+		background: #fff;
+		vertical-align: middle;
+		box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+		animation: blink 1s infinite;
+	}
+	@keyframes blink {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0; }
+	}
+
+	.how-it-works {
+		padding: 8rem 0;
+		background: rgba(255, 255, 255, 0.01);
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+	}
+	.section-title {
+		text-align: center;
+		font-size: 2.5rem;
+		font-weight: 800;
+		margin-bottom: 5rem;
+	}
+	.steps-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 3rem;
+	}
+	.step-card {
+		position: relative;
+	}
+	.step-num {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 4rem;
+		font-weight: 900;
+		color: rgba(255, 255, 255, 0.03);
+		position: absolute;
+		top: -2rem; left: 0;
+		line-height: 1;
+	}
+	.step-card h4 {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		position: relative;
+	}
+	.step-card p {
+		color: var(--muted);
+		margin-bottom: 1.5rem;
+		line-height: 1.6;
+	}
+	.code-snippet {
+		background: #000;
+		padding: 0.8rem 1rem;
+		border-radius: 6px;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.8rem;
+		color: #fff;
+		border: 1px solid var(--border);
+	}
+	.status-pill {
+		display: inline-block;
+		background: rgba(255, 255, 255, 0.05);
+		padding: 0.4rem 1rem;
+		border-radius: 100px;
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: #fff;
+	}
+
+	.use-cases {
+		padding: 8rem 0 12rem;
+	}
+	.bento-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+	}
+	.bento-card {
+		background: var(--surface);
+		border-radius: 24px;
+		border: 1px solid var(--border);
+		padding: 2.5rem;
+		position: relative;
+		overflow: hidden;
+		transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.4s;
+		min-height: 280px;
+	}
+	.bento-card:hover {
+		transform: translateY(-8px);
+		border-color: var(--border-hover);
+	}
+	.spotlight::before {
+		content: "";
+		position: absolute;
+		top: 0; left: 0;
+		width: 100%; height: 100%;
+		background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+		opacity: 0;
+		transition: opacity 0.5s;
+		pointer-events: none;
+	}
+	.spotlight:hover::before {
+		opacity: 1;
+	}
+	.card-content h3 {
+		font-size: 1.5rem;
+		line-height: 1.2;
+		margin-bottom: 1.2rem;
+		font-weight: 800;
+	}
+	.card-content p {
+		color: var(--muted);
+		line-height: 1.6;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 900px) {
+		.steps-grid { grid-template-columns: 1fr; }
+		.bento-grid { grid-template-columns: 1fr; }
+		.glass-terminal { transform: none !important; animation: none; }
+		.value-bullets { flex-direction: column; gap: 1rem; }
+	}
+</style>

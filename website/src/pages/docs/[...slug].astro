@@ -1,0 +1,155 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.map(entry => ({
+    params: { slug: entry.id }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const allDocs = await getCollection('docs');
+---
+
+<Layout title={`${entry.data.title} - agrepl Docs`}>
+	<div class="docs-container container">
+		<aside class="sidebar">
+			<nav>
+				<div class="sidebar-label">Documentation</div>
+				<ul>
+					{allDocs.map(doc => (
+						<li>
+							<a href={`/docs/${doc.id}`} class={entry.id === doc.id ? 'active' : ''}>
+								{doc.data.title}
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
+		</aside>
+		<article class="content">
+			<Content />
+		</article>
+	</div>
+</Layout>
+
+<style>
+	.docs-container {
+		display: grid;
+		grid-template-columns: 240px 1fr;
+		gap: 5rem;
+		padding-top: 6rem;
+		padding-bottom: 8rem;
+	}
+	.sidebar {
+		position: sticky;
+		top: 8rem;
+		height: fit-content;
+	}
+	.sidebar-label {
+		font-size: 0.75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: #3f3f46;
+		margin-bottom: 1.5rem;
+	}
+	.sidebar nav ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.sidebar nav ul li {
+		margin-bottom: 0.25rem;
+	}
+	.sidebar nav ul li a {
+		text-decoration: none;
+		color: var(--muted);
+		font-weight: 500;
+		transition: all 0.2s;
+		display: block;
+		padding: 0.6rem 1rem;
+		border-radius: 8px;
+		font-size: 0.95rem;
+	}
+	.sidebar nav ul li a:hover {
+		color: #fff;
+		background: var(--surface);
+	}
+	.sidebar nav ul li a.active {
+		color: #fff;
+		background: var(--surface);
+		font-weight: 600;
+		border: 1px solid var(--border);
+	}
+
+	.content {
+		max-width: 800px;
+		line-height: 1.8;
+		font-size: 1.1rem;
+		color: #a1a1aa;
+	}
+	.content :global(h1) {
+		margin-top: 0;
+		font-size: clamp(2.5rem, 5vw, 3.5rem);
+		margin-bottom: 2rem;
+		color: #fff;
+		letter-spacing: -0.04em;
+		font-weight: 900;
+	}
+	.content :global(h2) {
+		margin-top: 4rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid var(--border);
+		color: #fff;
+		font-size: 1.75rem;
+		letter-spacing: -0.02em;
+	}
+	.content :global(h3) {
+		margin-top: 2.5rem;
+		color: #fff;
+	}
+	.content :global(p) {
+		margin-bottom: 1.5rem;
+	}
+	.content :global(strong) {
+		color: #fff;
+	}
+	.content :global(ul) {
+		margin-bottom: 2rem;
+		padding-left: 1.5rem;
+	}
+	.content :global(li) {
+		margin-bottom: 0.75rem;
+	}
+	.content :global(li::marker) {
+		color: #fff;
+	}
+	.content :global(a) {
+		color: #fff;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+		text-decoration-color: var(--border);
+		transition: text-decoration-color 0.2s;
+	}
+	.content :global(a:hover) {
+		text-decoration-color: #fff;
+	}
+
+	@media (max-width: 900px) {
+		.docs-container {
+			grid-template-columns: 1fr;
+			gap: 3rem;
+			padding-top: 2rem;
+		}
+		.sidebar {
+			position: static;
+			border-bottom: 1px solid var(--border);
+			padding-bottom: 3rem;
+		}
+	}
+</style>

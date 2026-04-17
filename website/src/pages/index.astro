@@ -389,53 +389,66 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	.how-it-works {
-		padding: 8rem 0;
-		background: rgba(255, 255, 255, 0.01);
+		padding: 10rem 0;
+		background: radial-gradient(40% 50% at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
 		border-top: 1px solid var(--border);
 		border-bottom: 1px solid var(--border);
 	}
 	.section-title {
 		text-align: center;
-		font-size: 2.5rem;
-		font-weight: 800;
-		margin-bottom: 5rem;
+		font-size: 3rem;
+		font-weight: 900;
+		margin-bottom: 6rem;
+		letter-spacing: -0.04em;
 	}
 	.steps-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		gap: 3rem;
+		gap: 4rem;
 	}
 	.step-card {
 		position: relative;
+		transition: transform 0.3s ease;
+	}
+	.step-card:hover {
+		transform: translateY(-5px);
 	}
 	.step-num {
 		font-family: 'JetBrains Mono', monospace;
-		font-size: 4rem;
+		font-size: 5rem;
 		font-weight: 900;
-		color: rgba(255, 255, 255, 0.03);
+		color: rgba(255, 255, 255, 0.05);
 		position: absolute;
-		top: -2rem; left: 0;
+		top: -2.5rem; left: -1rem;
 		line-height: 1;
+		z-index: 0;
 	}
 	.step-card h4 {
-		font-size: 1.5rem;
-		font-weight: 700;
-		margin-bottom: 1rem;
+		font-size: 1.6rem;
+		font-weight: 800;
+		margin-bottom: 1.25rem;
 		position: relative;
+		z-index: 1;
 	}
 	.step-card p {
 		color: var(--muted);
-		margin-bottom: 1.5rem;
-		line-height: 1.6;
+		margin-bottom: 2rem;
+		line-height: 1.7;
+		font-size: 1.05rem;
+		position: relative;
+		z-index: 1;
 	}
 	.code-snippet {
 		background: #000;
-		padding: 0.8rem 1rem;
-		border-radius: 6px;
+		padding: 1rem;
+		border-radius: 8px;
 		font-family: 'JetBrains Mono', monospace;
-		font-size: 0.8rem;
-		color: #fff;
+		font-size: 0.75rem;
+		color: #eee;
 		border: 1px solid var(--border);
+		white-space: nowrap;
+		overflow-x: auto;
+		box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 	}
 	.status-pill {
 		display: inline-block;

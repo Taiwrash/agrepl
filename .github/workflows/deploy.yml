@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.12.0
           cache: 'npm'
           cache-dependency-path: website/package-lock.json
 
@@ -28,6 +28,7 @@ jobs:
         uses: withastro/action@v3
         with:
           path: website/
+          node-version: 22.12.0
 
   deploy:
     needs: build

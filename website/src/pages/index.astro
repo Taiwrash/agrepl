@@ -123,7 +123,7 @@ import Layout from '../layouts/Layout.astro';
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
 						</div>
 						<h3>Burn code, <br/>not credits</h3>
 						<p>Iterate on reasoning loops without hitting Gemini or OpenAI for every minor fix. Replay the same LLM response while you perfect your tool-calling logic.</p>
@@ -134,7 +134,7 @@ import Layout from '../layouts/Layout.astro';
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m9.05 14.57 2.12 2.12a2 2 0 0 0 2.83 0l4.24-4.24"/><path d="M7 10h.01"/><path d="M11 8h.01"/><path d="M15 10h.01"/></svg>
 						</div>
 						<h3>Kill the <br/>stochasticity</h3>
 						<p>Stop chasing ghosts. When a test fails in CI, replay the exact run that broke. Determinism is the only way to build production-grade AI.</p>
@@ -145,7 +145,7 @@ import Layout from '../layouts/Layout.astro';
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
 						</div>
 						<h3>Privacy-Locked <br/>by Default</h3>
 						<p>Sensitive PII and proprietary prompts never leave your local environment. agrepl is a tool for developers who take security seriously.</p>
@@ -610,11 +610,13 @@ import Layout from '../layouts/Layout.astro';
 	.card-inner { position: relative; z-index: 2; }
 	.icon-wrap {
 		width: 48px; height: 48px;
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 12px;
 		display: flex; align-items: center; justify-content: center;
 		margin-bottom: 2.5rem;
 		color: #fff;
+		box-shadow: inset 0 0 12px rgba(255,255,255,0.02);
 	}
 	.icon-wrap svg { width: 24px; height: 24px; }
 	.bento-card-glass h3 {

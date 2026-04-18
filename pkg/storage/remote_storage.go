@@ -16,6 +16,7 @@ import (
 type RemoteStorage struct {
 	client *s3.Client
 	bucket string
+	Prefix string
 }
 
 func NewRemoteStorage() (*RemoteStorage, error) {
@@ -52,7 +53,7 @@ func NewRemoteStorage() (*RemoteStorage, error) {
 }
 
 func (rs *RemoteStorage) Push(ctx context.Context, runID string, data []byte) error {
-	key := fmt.Sprintf("runs/%s.json", runID)
+	key := fmt.Sprintf("%s/runs/%s.json", rs.Prefix, runID)
 	_, err := rs.client.PutObject(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(rs.bucket),
 		Key:    aws.String(key),
@@ -65,7 +66,7 @@ func (rs *RemoteStorage) Push(ctx context.Context, runID string, data []byte) er
 }
 
 func (rs *RemoteStorage) Pull(ctx context.Context, runID string) ([]byte, error) {
-	key := fmt.Sprintf("runs/%s.json", runID)
+	key := fmt.Sprintf("%s/runs/%s.json", rs.Prefix, runID)
 	output, err := rs.client.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: aws.String(rs.bucket),
 		Key:    aws.String(key),

@@ -100,10 +100,40 @@ func PerformGitHubLogin(ctx context.Context, clientID, clientSecret string) (*Co
 }
 
 func finalizeLogin(token string) (*Config, error) {
-	// In a real implementation, we would now call GitHub API to get user info
+	// Fetch user info from GitHub
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", "https://api.github.com/user", nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", "token "+token)
+	
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch user info: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("github api returned status: %s", resp.Status)
+	}
+
+	var ghUser struct {
+		Email string `json:"email"`
+		Login string `json:"login"`
+	}
+	if err := json.NewDecoder(resp.Body).Decode(&ghUser); err != nil {
+		return nil, err
+	}
+
+	email := ghUser.Email
+	if email == "" {
+		email = ghUser.Login // Fallback if email is private
+	}
+
 	cfg := &Config{
 		AccessToken: token,
-		Email:       "user@example.com", // Generic mock email
+		Email:       email,
 		TeamID:      "personal",
 		Tier:        "local", // Default to Local (Free) tier
 	}

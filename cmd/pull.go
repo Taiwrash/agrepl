@@ -33,13 +33,21 @@ var pullCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		// Load auth config to get TeamID
+		cfg, err := auth.LoadConfig()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "\033[31mError: You must be logged in to pull. Run 'agrepl auth login'\033[0m\n")
+			os.Exit(1)
+		}
+
 		rs, err := storage.NewRemoteStorage()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mError initializing remote storage: %v\033[0m\n", err)
 			os.Exit(1)
 		}
+		rs.Prefix = cfg.TeamID
 
-		fmt.Printf("\033[36mPulling run %s from remote storage...\033[0m\n", runID)
+		fmt.Printf("\033[36mPulling run %s from remote storage (Team: %s)...\033[0m\n", runID, cfg.TeamID)
 		data, err := rs.Pull(context.Background(), runID)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)

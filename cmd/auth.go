@@ -75,9 +75,41 @@ var statusCmd = &cobra.Command{
 	},
 }
 
+var upgradeCmd = &cobra.Command{
+	Use:   "upgrade",
+	Short: "Upgrade your account to the Pro tier",
+	Run: func(cmd *cobra.Command, args []string) {
+		cfg, err := auth.LoadConfig()
+		if err != nil {
+			fmt.Println("\033[31mError: You must be logged in to upgrade. Run 'agrepl auth login'\033[0m")
+			return
+		}
+
+		if cfg.Tier == "pro" || cfg.Tier == "enterprise" {
+			fmt.Printf("Your account is already on the \033[1m%s\033[0m tier.\n", cfg.Tier)
+			return
+		}
+
+		fmt.Println("\033[36mOpening checkout page at https://agrepl.dev/pricing/checkout...\033[0m")
+		fmt.Println("Simulating payment success...")
+		
+		// In a real app, we would wait for a webhook or poll the backend.
+		// For the demo, we just update the local config.
+		cfg.Tier = "pro"
+		if err := auth.SaveConfig(cfg); err != nil {
+			fmt.Printf("\033[31mError saving updated tier: %v\033[0m\n", err)
+			return
+		}
+
+		fmt.Printf("\n\033[32m✓ Successfully upgraded to Pro Tier!\033[0m\n")
+		fmt.Println("You now have access to Team Sync, Semantic Diff, and more.")
+	},
+}
+
 func init() {
 	authCmd.AddCommand(loginCmd)
 	authCmd.AddCommand(logoutCmd)
 	authCmd.AddCommand(statusCmd)
+	authCmd.AddCommand(upgradeCmd)
 	rootCmd.AddCommand(authCmd)
 }

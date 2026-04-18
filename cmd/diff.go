@@ -15,14 +15,24 @@ import (
 var verbose bool
 
 var noiseHeaders = map[string]bool{
-	"Date":              true,
-	"X-Request-Id":      true,
-	"X-Timer":           true,
-	"Age":               true,
-	"Via":               true,
-	"Server":            true,
-	"Connection":       true,
-	"Transfer-Encoding": true,
+	"Date":                true,
+	"X-Request-Id":        true,
+	"X-Timer":             true,
+	"Age":                 true,
+	"Via":                 true,
+	"Server":              true,
+	"Connection":          true,
+	"Transfer-Encoding":   true,
+	"X-Fastly-Request-Id": true,
+	"X-Github-Request-Id": true,
+	"X-Served-By":         true,
+	"X-Cache":             true,
+	"X-Cache-Hits":        true,
+}
+
+var annotations = map[string]string{
+	"Location": "Redirect target changed",
+	"X-Cache":  "CDN Cache state changed (HIT/MISS)",
 }
 
 var diffCmd = &cobra.Command{
@@ -123,7 +133,12 @@ var diffCmd = &cobra.Command{
 		}
 
 		if !diffFound {
-			fmt.Println("\n\033[32m✓ No differences found between runs.\033[0m")
+			if stats.FilteredNoise > 0 {
+				fmt.Printf("\n\033[32m✓ No meaningful differences found.\033[0m\n")
+				fmt.Printf("\033[90m(all changes are non-deterministic headers: %d noise filtered)\033[0m\n", stats.FilteredNoise)
+			} else {
+				fmt.Println("\n\033[32m✓ No differences found between runs.\033[0m")
+			}
 		} else {
 			fmt.Printf("\n\033[1m[SUMMARY]\033[0m\n")
 			if stats.StepsRemoved > 0 {
@@ -195,7 +210,11 @@ func diffHTTP(idx int, s1, s2 core.Step) (changed, statusChanged, bodyChanged bo
 					hNoise++
 				} else {
 					printHeader()
-					fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m%v\033[0m\n", k, v1, v2)
+					hint := ""
+					if msg, ok := annotations[k]; ok {
+						hint = fmt.Sprintf(" \033[90m(%s)\033[0m", msg)
+					}
+					fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m%v\033[0m%s\n", k, v1, v2, hint)
 					changed = true
 					hDiff++
 				}
@@ -205,7 +224,11 @@ func diffHTTP(idx int, s1, s2 core.Step) (changed, statusChanged, bodyChanged bo
 				hNoise++
 			} else {
 				printHeader()
-				fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m(missing)\033[0m\n", k, v1)
+				hint := ""
+				if msg, ok := annotations[k]; ok {
+					hint = fmt.Sprintf(" \033[90m(%s)\033[0m", msg)
+				}
+				fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m(missing)\033[0m%s\n", k, v1, hint)
 				changed = true
 				hDiff++
 			}
@@ -214,7 +237,11 @@ func diffHTTP(idx int, s1, s2 core.Step) (changed, statusChanged, bodyChanged bo
 				hNoise++
 			} else {
 				printHeader()
-				fmt.Printf("  Header %s: \033[31m(missing)\033[0m -> \033[32m%v\033[0m\n", k, v2)
+				hint := ""
+				if msg, ok := annotations[k]; ok {
+					hint = fmt.Sprintf(" \033[90m(%s)\033[0m", msg)
+				}
+				fmt.Printf("  Header %s: \033[31m(missing)\033[0m -> \033[32m%v\033[0m%s\n", k, v2, hint)
 				changed = true
 				hDiff++
 			}

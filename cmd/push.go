@@ -14,8 +14,9 @@ import (
 )
 
 var pushCmd = &cobra.Command{
-	Use:   "push <run-id>",
-	Short: "Uploads a run to remote storage",
+	Use:    "push <run-id>",
+	Hidden: true,
+	Short:  "Uploads a run to remote storage",
 	Long:  `The push command uploads a locally recorded agent execution to the configured R2 bucket.`,
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {

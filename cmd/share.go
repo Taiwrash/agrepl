@@ -44,6 +44,12 @@ var shareCmd = &cobra.Command{
 		}
 
 		// 3. Register and Upload
+		teamPrefix := cfg.TeamID
+		if len(teamPrefix) > 4 {
+			teamPrefix = teamPrefix[:4]
+		}
+		shareID := fmt.Sprintf("share-%s-%s", teamPrefix, runID)
+
 		fmt.Printf("\033[36mAuthenticating with Team Workspace: %s...\033[0m\n", cfg.TeamID)
 
 		rs, err := storage.NewRemoteStorage()
@@ -51,19 +57,15 @@ var shareCmd = &cobra.Command{
 			fmt.Printf("\033[33mWarning: Remote storage not configured (Env vars missing).\033[0m\n")
 			fmt.Println("To enable real uploads, set AGREPL_R2_* environment variables.")
 		} else {
+			rs.Prefix = cfg.TeamID
 			fmt.Printf("\033[36mUploading run to cloud...\033[0m\n")
-			if err := rs.Push(context.Background(), runID, data); err != nil {
+			if err := rs.Push(context.Background(), shareID, data); err != nil {
 				fmt.Fprintf(os.Stderr, "\033[31mUpload failed: %v\033[0m\n", err)
 				os.Exit(1)
 			}
 		}
 
 		// 4. Return Shareable ID
-		teamPrefix := cfg.TeamID
-		if len(teamPrefix) > 4 {
-			teamPrefix = teamPrefix[:4]
-		}
-		shareID := fmt.Sprintf("share-%s-%s", teamPrefix, runID)
 		fmt.Printf("\n\033[32m✓ Run successfully shared!\033[0m\n")
 		fmt.Printf("Share ID: \033[1m%s\033[0m\n", shareID)
 		fmt.Printf("Teammates can replay this using:\n  agrepl pull %s\n", shareID)

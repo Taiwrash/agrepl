@@ -777,13 +777,22 @@ import Layout from '../layouts/Layout.astro';
 	.check { color: #27c93f; font-weight: bold; }
 
 	@media (max-width: 900px) {
-		.flow-step, .flow-step.reverse { flex-direction: column; gap: 3rem; text-align: center; }
+		.hero { padding: 6rem 0 3rem; }
+		h1 { font-size: 2.5rem; }
+		.ctas { flex-direction: column; }
+		.flow-step, .flow-step.reverse { flex-direction: column; gap: 3rem; text-align: center; margin-bottom: 6rem; }
 		.flow-line { display: none; }
 		.bento-grid-creative { grid-template-columns: 1fr; }
-		.comparison-grid { grid-template-columns: 1fr; }
+		.comparison-grid { grid-template-columns: 1fr; padding: 0 1rem; }
 		.step-visual { order: -1; }
-		.glass-terminal { transform: none !important; animation: none; }
+		.glass-terminal { 
+			transform: none !important; 
+			animation: none; 
+			min-height: auto;
+		}
 		.value-bullets { flex-direction: column; gap: 1rem; }
+		.how-it-works { padding: 6rem 0; }
+		.comparison-section { padding: 6rem 0; }
 	}
 	.bento-card-glass:hover .icon-wrap {
 		color: #fff;

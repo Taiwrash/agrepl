@@ -158,7 +158,12 @@ import Layout from '../layouts/Layout.astro';
 	.faq-item p { color: var(--muted); line-height: 1.6; }
 
 	@media (max-width: 900px) {
-		.tiers { grid-template-columns: 1fr; }
-		.tier.featured { transform: none; margin: 2rem 0; }
+		.pricing-hero { padding: 6rem 0 2rem; }
+		h1 { font-size: 2.5rem; }
+		.tiers { grid-template-columns: 1fr; gap: 3rem; }
+		.tier { padding: 2rem; }
+		.tier.featured { transform: none; margin: 0; }
+		.faq { padding: 4rem 0; }
+		.faq-list { gap: 2rem; }
 	}
 </style>

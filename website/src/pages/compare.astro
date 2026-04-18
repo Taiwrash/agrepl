@@ -176,7 +176,22 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	@media (max-width: 800px) {
+		.compare-hero { padding: 6rem 0 2rem; }
 		.comparison-grid-detailed { grid-template-columns: 1fr; }
-		h1 { font-size: 2.5rem; }
+		h1 { font-size: 2.2rem; }
+		.matrix-wrapper {
+			margin: 0 -1.5rem;
+			border-left: none;
+			border-right: none;
+		}
+		table {
+			display: block;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+		th, td {
+			padding: 1rem;
+		}
+		.compare-card-alt { padding: 2rem; }
 	}
 </style>

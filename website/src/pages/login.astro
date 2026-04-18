@@ -140,6 +140,16 @@ import Layout from '../layouts/Layout.astro';
 		background: radial-gradient(circle at bottom right, rgba(255,255,255,0.03), transparent 70%);
 		z-index: 0; pointer-events: none;
 	}
+
+	@media (max-width: 768px) {
+		.login-page { padding: 6rem 0 4rem; }
+		.login-card { padding: 2.5rem 1.5rem; }
+		.icon-wrap-large { width: 48px; height: 48px; margin-bottom: 1.5rem; }
+		.icon-wrap-large svg { width: 24px; height: 24px; }
+		h1 { font-size: 1.5rem; }
+		.code-box { flex-direction: column; gap: 0.8rem; align-items: flex-start; }
+		.auth-steps { gap: 2rem; }
+	}
 </style>
 
 <script>

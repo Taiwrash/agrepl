@@ -80,12 +80,12 @@ import Layout from '../layouts/Layout.astro';
 					<div class="step-content">
 						<div class="step-badge">Phase 02</div>
 						<h4>Serve from the trace</h4>
-						<p>Re-run with <code>agrepl replay</code>. Your agent thinks it's talking to the world, but it's actually pulling from a local, immutable JSON trace.</p>
+						<p>Re-run instantly with <code>agrepl run</code>. Your agent thinks it's talking to the world, but it's actually pulling from a local, immutable JSON trace.</p>
 						<div class="code-window">
 							<div class="window-dot red"></div>
 							<div class="window-dot yellow"></div>
 							<div class="window-dot green"></div>
-							<div class="code-content">agrepl replay run-001 -- python agent.py</div>
+							<div class="code-content">agrepl run run-010</div>
 						</div>
 					</div>
 					<div class="step-visual">
@@ -162,23 +162,26 @@ import Layout from '../layouts/Layout.astro';
 <script>
 	const script = [
 		{
-			command: "agrepl record --command 'python agent.py'",
+			command: "agrepl record -- python agent.py",
 			output: [
 				"[INFO] Proxy server listening on :8000",
-				"[INFO] Root CA trusted for child process",
-				"[RECORD] Captured LLM: gemini-2.0-flash (HTTPS)",
+				"[RECORD] Captured LLM: gemini-2.0-flash",
 				"[RECORD] Captured HTTP: GET https://api.github.com/repos/google/agrepl",
-				"[INFO] Run saved to .agent-replay/runs/run-001.json",
-				"[SUCCESS] 12 steps captured locally."
+				"[SUCCESS] 12 steps captured. Run ID: run-010"
 			]
 		},
 		{
-			command: "agrepl replay run-001 --command 'python agent.py'",
+			command: "agrepl run run-010",
 			output: [
-				"[INFO] Replaying session run-001 (OFFLINE MODE)...",
+				"[RUN] Shortcut for: agrepl replay run-010 --summary python agent.py",
+				"[REPLAY] Mode: STRICT (no network allowed)",
 				"[REPLAY] Matched LLM call: gemini-2.0-flash",
 				"[REPLAY] Matched HTTP: GET https://api.github.com/repos/google/agrepl",
-				"[SUCCESS] Replay complete. Zero network requests made."
+				"",
+				"✓ Replay complete",
+				"Steps: 12",
+				"Network calls: 0",
+				"Deterministic: yes"
 			]
 		}
 	];

@@ -17,6 +17,7 @@ import (
 )
 
 var fallback bool
+var summary bool
 
 var replayCmd = &cobra.Command{
 	Use:   "replay <run-id> <command> [args...]",
@@ -25,7 +26,6 @@ var replayCmd = &cobra.Command{
 returning recorded responses instead of making real calls, ensuring determinism.`,
 	Args: cobra.MinimumNArgs(2), // run-id + command
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Replay command called")
 		runID := args[0]
 
 		// Initialize storage
@@ -102,11 +102,23 @@ returning recorded responses instead of making real calls, ensuring determinism.
 			os.Exit(1)
 		}
 
-		fmt.Printf("\n\033[32m[SUCCESS] Replay complete. Zero network requests made.\033[0m\n")
+		if summary {
+			fmt.Printf("\n\033[32m✓ Replay complete\033[0m\n")
+			fmt.Printf("Steps: %d\n", len(run.Steps))
+			fmt.Printf("Network calls: %d\n", httpInterceptor.NetworkCallCount)
+			deterministic := "yes"
+			if httpInterceptor.NetworkCallCount > 0 {
+				deterministic = "no (fallback used)"
+			}
+			fmt.Printf("Deterministic: %s\n", deterministic)
+		} else {
+			fmt.Printf("\n\033[32m[SUCCESS] Replay complete. Zero network requests made.\033[0m\n")
+		}
 	},
 }
 
 func init() {
 	replayCmd.Flags().BoolVarP(&fallback, "fallback", "f", false, "Hit real network if recorded request is not found")
+	replayCmd.Flags().BoolVarP(&summary, "summary", "s", false, "Show concise summary of replay results")
 	rootCmd.AddCommand(replayCmd)
 }

@@ -8,8 +8,9 @@ import (
 
 // Run represents a single recorded execution of an agent.
 type Run struct {
-	RunID string `json:"run_id"`
-	Steps []Step `json:"steps"`
+	RunID           string `json:"run_id"`
+	OriginalCommand string `json:"original_command"`
+	Steps           []Step `json:"steps"`
 }
 
 // StepType defines the type of an interaction step.

@@ -69,9 +69,13 @@ var pullCmd = &cobra.Command{
 			db, err := storage.NewDB(".")
 			if err == nil {
 				defer db.Close()
+				command := run.OriginalCommand
+				if command == "" {
+					command = "pulled-from-remote"
+				}
 				db.SaveMetadata(&storage.RunMetadata{
-					RunID:      run.RunID,
-					Command:    "pulled-from-remote", // We don't know the original command unless we store it in the JSON
+					RunID:      runID,
+					Command:    fmt.Sprintf("%s (Source: remote %s)", command, runID),
 					CreatedAt:  time.Now(),
 					TotalSteps: len(run.Steps),
 					Status:     "completed",

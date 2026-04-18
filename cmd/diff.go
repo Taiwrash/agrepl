@@ -134,8 +134,8 @@ var diffCmd = &cobra.Command{
 
 		if !diffFound {
 			if stats.FilteredNoise > 0 {
-				fmt.Printf("\n\033[32m✓ No meaningful differences found.\033[0m\n")
-				fmt.Printf("\033[90m(all changes are non-deterministic headers: %d noise filtered)\033[0m\n", stats.FilteredNoise)
+				fmt.Printf("\n\033[32m✓ No meaningful differences found (all changes filtered as non-deterministic).\033[0m\n")
+				fmt.Printf("\033[90m(%d noise headers ignored)\033[0m\n", stats.FilteredNoise)
 			} else {
 				fmt.Println("\n\033[32m✓ No differences found between runs.\033[0m")
 			}

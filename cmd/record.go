@@ -105,6 +105,9 @@ LLM calls and HTTP requests/responses. The execution trace is stored locally.`,
 		}
 		currentRun.RunID = finalRunID
 
+		fullCommand := commandToExecute + " " + strings.Join(commandArgs, " ")
+		currentRun.OriginalCommand = fullCommand
+
 		// Save the recorded run
 		if err := s.SaveRun(currentRun); err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mError saving recorded run: %v\033[0m\n", err)

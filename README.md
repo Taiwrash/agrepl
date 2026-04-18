@@ -5,13 +5,14 @@ Record LLM and API interactions. Replay them offline with zero network calls. Re
 ## The Problem
 AI agents are non-deterministic. Debugging a failing run by re-executing your script is slow, expensive, and often impossible to reproduce because of LLM variability and changing API state.
 
-## The Solution
-`agrepl` is a local-first proxy that intercepts your agent's traffic. Once recorded, you can replay the entire session offline. **Zero network requests made.**
+## The Solution: Beyond Observability
+Traditional tracing tools (LangSmith, W&B) let you **observe** bugs. `agrepl` lets you **reproduce** them.
 
-- **Reproduce** any agent run with 100% fidelity.
-- **Debug** without burning API credits.
-- **Works with any CLI tool** (Python, Node, Go, curl, etc.).
-- **Model Agnostic**: Works with Gemini, OpenAI, Anthropic, or any custom API.
+`agrepl` is a deterministic execution layer for AI agents. It captures every LLM and API interaction and serves them back with 100% fidelity.
+
+- **Deterministic**: Replay is a lookup, not a re-execution. Zero network calls.
+- **Zero-Instrumentation**: No SDKs. Works with Python, Node, Go, curl, or any CLI.
+- **Shareable Truth**: `share` a run → `pull` on another machine → Replay the same bug instantly.
 
 ## Quick Start (30s)
 
@@ -26,12 +27,12 @@ Run your agent through `agrepl`. It captures all HTTP(S) and LLM interactions.
 agrepl record -- python agent.py
 ```
 
-### 3. Replay (Offline)
-Re-run with the same command. `agrepl` serves recorded responses from your local machine.
+### 3. Replay
+Re-run instantly. `agrepl` finds the original command and re-executes it in a deterministic sandbox.
 ```bash
-agrepl replay run-001 -- python agent.py
+agrepl run run-010
 ```
-> **Killer Feature:** Replay works without an internet connection. No new API calls are made.
+> **The Edge:** Replay works without an internet connection. No new API calls are made. Zero latency. Zero cost.
 
 ### 4. Share (Team Collaboration)
 Share your run with your team for collaborative debugging.

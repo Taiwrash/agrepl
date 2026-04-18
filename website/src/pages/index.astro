@@ -431,6 +431,8 @@ import Layout from '../layouts/Layout.astro';
 		align-items: center;
 		justify-content: space-between;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+		flex-wrap: wrap;
+		gap: 1rem;
 	}
 	.dots {
 		display: flex;
@@ -482,6 +484,7 @@ import Layout from '../layouts/Layout.astro';
 		font-size: 0.9rem;
 		line-height: 1.6;
 		color: #a1a1aa;
+		overflow-x: auto;
 	}
 	.line { margin-bottom: 0.4rem; }
 	.prompt {
@@ -798,6 +801,19 @@ import Layout from '../layouts/Layout.astro';
 		color: #fff;
 		border-color: rgba(255,255,255,0.3);
 		background: rgba(255,255,255,0.1);
+	}
+
+	@media (max-width: 600px) {
+		.terminal-header {
+			flex-direction: column;
+			align-items: flex-start;
+			padding: 1rem;
+		}
+		.terminal-body {
+			padding: 1rem;
+			font-size: 0.75rem;
+		}
+		.dots { display: none; }
 	}
 </style>
 

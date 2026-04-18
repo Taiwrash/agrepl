@@ -1,8 +1,11 @@
+
 # Binary
 agrepl
 
 # Local traces and CA
 .agent-replay/
+agent_replay_prd.md
+GO_TO_MARKET.md
 
 # OS files
 .DS_Store

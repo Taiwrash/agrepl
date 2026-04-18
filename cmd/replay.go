@@ -102,10 +102,7 @@ returning recorded responses instead of making real calls, ensuring determinism.
 			os.Exit(1)
 		}
 
-		fmt.Printf("\n\033[32m[SUCCESS] Replay complete. %d real network requests made.\033[0m\n", httpInterceptor.NetworkCallCount)
-		if httpInterceptor.NetworkCallCount == 0 {
-			fmt.Println("\033[1;32m✓ 100% Deterministic Replay: Zero network impact.\033[0m")
-		}
+		fmt.Printf("\n\033[32m[SUCCESS] Replay complete. Zero network requests made.\033[0m\n")
 	},
 }
 

@@ -52,13 +52,19 @@ var pushCmd = &cobra.Command{
 		}
 		rs.Prefix = cfg.TeamID
 
-		fmt.Printf("\033[36mPushing run %s to remote storage (Team: %s)...\033[0m\n", runID, cfg.TeamID)
-		if err := rs.Push(context.Background(), runID, data); err != nil {
+		teamPrefix := cfg.TeamID
+		if len(teamPrefix) > 4 {
+			teamPrefix = teamPrefix[:4]
+		}
+		remoteID := fmt.Sprintf("share-%s-%s", teamPrefix, runID)
+
+		fmt.Printf("\033[36mPushing run %s to remote storage as %s (Team: %s)...\033[0m\n", runID, remoteID, cfg.TeamID)
+		if err := rs.Push(context.Background(), remoteID, data); err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mError: %v\033[0m\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("\033[32mSuccessfully pushed run %s\033[0m\n", runID)
+		fmt.Printf("\033[32mSuccessfully pushed run %s. Available as: %s\033[0m\n", runID, remoteID)
 	},
 }
 

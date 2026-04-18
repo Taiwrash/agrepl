@@ -12,6 +12,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var verbose bool
+
+var noiseHeaders = map[string]bool{
+	"Date":              true,
+	"X-Request-Id":      true,
+	"X-Timer":           true,
+	"Age":               true,
+	"Via":               true,
+	"Server":            true,
+	"Connection":       true,
+	"Transfer-Encoding": true,
+}
+
 var diffCmd = &cobra.Command{
 	Use:   "diff <run-id-1> <run-id-2>",
 	Short: "Compares two agent runs and shows differences",
@@ -41,47 +54,88 @@ var diffCmd = &cobra.Command{
 
 		fmt.Printf("\033[36mComparing %s and %s\033[0m\n\n", runID1, runID2)
 
-		maxSteps := len(run1.Steps)
-		if len(run2.Steps) > maxSteps {
-			maxSteps = len(run2.Steps)
+		diffFound := false
+		stats := struct {
+			StepsChanged   int
+			StatusChanges  int
+			BodyChanges    int
+			HeaderDiffs    int
+			FilteredNoise int
+			StepsAdded     int
+			StepsRemoved   int
+		}{}
+
+		matchedIndices2 := make(map[int]bool)
+
+		// Iterate through Run 1 and find matches in Run 2
+		for i, s1 := range run1.Steps {
+			foundMatch := false
+			for j, s2 := range run2.Steps {
+				if matchedIndices2[j] {
+					continue
+				}
+
+				// Basic matching by type and URL/Model
+				if s1.Type == s2.Type && stepSummary(s1) == stepSummary(s2) {
+					matchedIndices2[j] = true
+					foundMatch = true
+
+					// Perform deep diff
+					switch s1.Type {
+					case core.StepTypeHTTP:
+						changed, statusChanged, bodyChanged, hDiff, hNoise := diffHTTP(i, s1, s2)
+						if changed {
+							diffFound = true
+							stats.StepsChanged++
+							if statusChanged {
+								stats.StatusChanges++
+							}
+							if bodyChanged {
+								stats.BodyChanges++
+							}
+							stats.HeaderDiffs += hDiff
+							stats.FilteredNoise += hNoise
+						}
+					case core.StepTypeLLM:
+						if diffLLM(i, s1, s2) {
+							diffFound = true
+							stats.StepsChanged++
+						}
+					}
+					break
+				}
+			}
+
+			if !foundMatch {
+				fmt.Printf("\033[31m[- STEP %d] (Removed from %s): %s\033[0m\n", i, runID1, stepSummary(s1))
+				diffFound = true
+				stats.StepsRemoved++
+			}
 		}
 
-		diffFound := false
-		for i := 0; i < maxSteps; i++ {
-			if i >= len(run1.Steps) {
-				fmt.Printf("\033[32m[+ STEP %d] (Only in %s): %s\033[0m\n", i, runID2, stepSummary(run2.Steps[i]))
+		// Find additions (steps in Run 2 that weren't matched)
+		for j, s2 := range run2.Steps {
+			if !matchedIndices2[j] {
+				fmt.Printf("\033[32m[+ STEP %d] (Added in %s): %s\033[0m\n", j, runID2, stepSummary(s2))
 				diffFound = true
-				continue
-			}
-			if i >= len(run2.Steps) {
-				fmt.Printf("\033[31m[- STEP %d] (Only in %s): %s\033[0m\n", i, runID1, stepSummary(run1.Steps[i]))
-				diffFound = true
-				continue
-			}
-
-			s1 := run1.Steps[i]
-			s2 := run2.Steps[i]
-
-			if s1.Type != s2.Type {
-				fmt.Printf("\033[33m[Δ STEP %d] Type Mismatch: %s -> %s\033[0m\n", i, s1.Type, s2.Type)
-				diffFound = true
-				continue
-			}
-
-			switch s1.Type {
-			case core.StepTypeHTTP:
-				if diffHTTP(i, s1, s2) {
-					diffFound = true
-				}
-			case core.StepTypeLLM:
-				if diffLLM(i, s1, s2) {
-					diffFound = true
-				}
+				stats.StepsAdded++
 			}
 		}
 
 		if !diffFound {
 			fmt.Println("\n\033[32m✓ No differences found between runs.\033[0m")
+		} else {
+			fmt.Printf("\n\033[1m[SUMMARY]\033[0m\n")
+			if stats.StepsRemoved > 0 {
+				fmt.Printf("%d step(s) removed\n", stats.StepsRemoved)
+			}
+			if stats.StepsAdded > 0 {
+				fmt.Printf("%d step(s) added\n", stats.StepsAdded)
+			}
+			fmt.Printf("%d step(s) modified\n", stats.StepsChanged)
+			fmt.Printf("%d status change(s)\n", stats.StatusChanges)
+			fmt.Printf("%d body change(s)\n", stats.BodyChanges)
+			fmt.Printf("%d header difference(s) (filtered: %d noise)\n", stats.HeaderDiffs, stats.FilteredNoise)
 		}
 	},
 }
@@ -97,8 +151,7 @@ func stepSummary(s core.Step) string {
 	}
 }
 
-func diffHTTP(idx int, s1, s2 core.Step) bool {
-	diffFound := false
+func diffHTTP(idx int, s1, s2 core.Step) (changed, statusChanged, bodyChanged bool, hDiff, hNoise int) {
 	headerPrinted := false
 	printHeader := func() {
 		if !headerPrinted {
@@ -110,27 +163,61 @@ func diffHTTP(idx int, s1, s2 core.Step) bool {
 	if s1.Request.URL != s2.Request.URL {
 		printHeader()
 		fmt.Printf("  URL: \033[31m%s\033[0m -> \033[32m%s\033[0m\n", s1.Request.URL, s2.Request.URL)
-		diffFound = true
+		changed = true
 	}
 
 	if s1.Response.StatusCode != s2.Response.StatusCode {
 		printHeader()
 		fmt.Printf("  Status: \033[31m%d\033[0m -> \033[32m%d\033[0m\n", s1.Response.StatusCode, s2.Response.StatusCode)
-		diffFound = true
+		changed = true
+		statusChanged = true
 	}
 
-	// Compare Headers (Basic)
-	for k, v1 := range s1.Response.Headers {
-		if v2, ok := s2.Response.Headers[k]; ok {
+	// Compare Headers
+	// Collect all keys
+	allKeys := make(map[string]bool)
+	for k := range s1.Response.Headers {
+		allKeys[k] = true
+	}
+	for k := range s2.Response.Headers {
+		allKeys[k] = true
+	}
+
+	for k := range allKeys {
+		v1, ok1 := s1.Response.Headers[k]
+		v2, ok2 := s2.Response.Headers[k]
+
+		isNoise := noiseHeaders[k]
+
+		if ok1 && ok2 {
 			if !reflect.DeepEqual(v1, v2) {
-				printHeader()
-				fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m%v\033[0m\n", k, v1, v2)
-				diffFound = true
+				if isNoise && !verbose {
+					hNoise++
+				} else {
+					printHeader()
+					fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m%v\033[0m\n", k, v1, v2)
+					changed = true
+					hDiff++
+				}
 			}
-		} else {
-			printHeader()
-			fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m(missing)\033[0m\n", k, v1)
-			diffFound = true
+		} else if ok1 {
+			if isNoise && !verbose {
+				hNoise++
+			} else {
+				printHeader()
+				fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m(missing)\033[0m\n", k, v1)
+				changed = true
+				hDiff++
+			}
+		} else if ok2 {
+			if isNoise && !verbose {
+				hNoise++
+			} else {
+				printHeader()
+				fmt.Printf("  Header %s: \033[31m(missing)\033[0m -> \033[32m%v\033[0m\n", k, v2)
+				changed = true
+				hDiff++
+			}
 		}
 	}
 
@@ -139,9 +226,10 @@ func diffHTTP(idx int, s1, s2 core.Step) bool {
 		fmt.Printf("  Body Differs:\n")
 		fmt.Printf("    \033[31m- %s\033[0m\n", truncate(string(s1.Response.Body)))
 		fmt.Printf("    \033[32m+ %s\033[0m\n", truncate(string(s2.Response.Body)))
-		diffFound = true
+		changed = true
+		bodyChanged = true
 	}
-	return diffFound
+	return
 }
 
 func diffLLM(idx int, s1, s2 core.Step) bool {
@@ -186,5 +274,6 @@ func truncate(s string) string {
 }
 
 func init() {
+	diffCmd.Flags().BoolVarP(&verbose, "verbose", "v", false, "Show all differences including noise headers")
 	rootCmd.AddCommand(diffCmd)
 }

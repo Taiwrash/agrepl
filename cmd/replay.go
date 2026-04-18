@@ -49,6 +49,12 @@ returning recorded responses instead of making real calls, ensuring determinism.
 		httpInterceptor := interceptor.NewHTTPInterceptor(interceptor.ModeReplay, s, run)
 		httpInterceptor.Fallback = fallback // Set fallback mode
 
+		modeStr := "STRICT (no network allowed)"
+		if fallback {
+			modeStr = "FALLBACK ENABLED (real network allowed)"
+		}
+		fmt.Printf("\033[36m[REPLAY] Mode: %s\033[0m\n", modeStr)
+
 		httpProxy := proxy.NewHTTPProxy(proxyAddr, httpInterceptor)
 
 		httpProxy.Start()
@@ -96,7 +102,10 @@ returning recorded responses instead of making real calls, ensuring determinism.
 			os.Exit(1)
 		}
 
-		fmt.Printf("\033[32m[REPLAY] Replay of run %s finished.\033[0m\n", runID)
+		fmt.Printf("\n\033[32m[SUCCESS] Replay complete. %d real network requests made.\033[0m\n", httpInterceptor.NetworkCallCount)
+		if httpInterceptor.NetworkCallCount == 0 {
+			fmt.Println("\033[1;32m✓ 100% Deterministic Replay: Zero network impact.\033[0m")
+		}
 	},
 }
 

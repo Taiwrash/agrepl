@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"reflect"
 
 	"agrepl/pkg/core"
 	"agrepl/pkg/storage"
@@ -69,14 +70,18 @@ var diffCmd = &cobra.Command{
 
 			switch s1.Type {
 			case core.StepTypeHTTP:
-				diffHTTP(i, s1, s2)
+				if diffHTTP(i, s1, s2) {
+					diffFound = true
+				}
 			case core.StepTypeLLM:
-				diffLLM(i, s1, s2)
+				if diffLLM(i, s1, s2) {
+					diffFound = true
+				}
 			}
 		}
 
 		if !diffFound {
-			fmt.Println("\033[32mNo differences found between runs.\033[0m")
+			fmt.Println("\n\033[32m✓ No differences found between runs.\033[0m")
 		}
 	},
 }
@@ -92,11 +97,12 @@ func stepSummary(s core.Step) string {
 	}
 }
 
-func diffHTTP(idx int, s1, s2 core.Step) {
+func diffHTTP(idx int, s1, s2 core.Step) bool {
+	diffFound := false
 	headerPrinted := false
 	printHeader := func() {
 		if !headerPrinted {
-			fmt.Printf("\033[33m[Δ STEP %d] HTTP %s %s\033[0m\n", idx, s1.Request.Method, s1.Request.URL)
+			fmt.Printf("\n\033[33m[Δ STEP %d] HTTP %s %s\033[0m\n", idx, s1.Request.Method, s1.Request.URL)
 			headerPrinted = true
 		}
 	}
@@ -104,11 +110,28 @@ func diffHTTP(idx int, s1, s2 core.Step) {
 	if s1.Request.URL != s2.Request.URL {
 		printHeader()
 		fmt.Printf("  URL: \033[31m%s\033[0m -> \033[32m%s\033[0m\n", s1.Request.URL, s2.Request.URL)
+		diffFound = true
 	}
 
 	if s1.Response.StatusCode != s2.Response.StatusCode {
 		printHeader()
 		fmt.Printf("  Status: \033[31m%d\033[0m -> \033[32m%d\033[0m\n", s1.Response.StatusCode, s2.Response.StatusCode)
+		diffFound = true
+	}
+
+	// Compare Headers (Basic)
+	for k, v1 := range s1.Response.Headers {
+		if v2, ok := s2.Response.Headers[k]; ok {
+			if !reflect.DeepEqual(v1, v2) {
+				printHeader()
+				fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m%v\033[0m\n", k, v1, v2)
+				diffFound = true
+			}
+		} else {
+			printHeader()
+			fmt.Printf("  Header %s: \033[31m%v\033[0m -> \033[32m(missing)\033[0m\n", k, v1)
+			diffFound = true
+		}
 	}
 
 	if !bytes.Equal(s1.Response.Body, s2.Response.Body) {
@@ -116,14 +139,17 @@ func diffHTTP(idx int, s1, s2 core.Step) {
 		fmt.Printf("  Body Differs:\n")
 		fmt.Printf("    \033[31m- %s\033[0m\n", truncate(string(s1.Response.Body)))
 		fmt.Printf("    \033[32m+ %s\033[0m\n", truncate(string(s2.Response.Body)))
+		diffFound = true
 	}
+	return diffFound
 }
 
-func diffLLM(idx int, s1, s2 core.Step) {
+func diffLLM(idx int, s1, s2 core.Step) bool {
+	diffFound := false
 	headerPrinted := false
 	printHeader := func() {
 		if !headerPrinted {
-			fmt.Printf("\033[33m[Δ STEP %d] LLM %s\033[0m\n", idx, s1.LLMInput.Model)
+			fmt.Printf("\n\033[33m[Δ STEP %d] LLM %s\033[0m\n", idx, s1.LLMInput.Model)
 			headerPrinted = true
 		}
 	}
@@ -131,6 +157,7 @@ func diffLLM(idx int, s1, s2 core.Step) {
 	if s1.LLMInput.Model != s2.LLMInput.Model {
 		printHeader()
 		fmt.Printf("  Model: \033[31m%s\033[0m -> \033[32m%s\033[0m\n", s1.LLMInput.Model, s2.LLMInput.Model)
+		diffFound = true
 	}
 
 	// Compare responses
@@ -146,7 +173,9 @@ func diffLLM(idx int, s1, s2 core.Step) {
 	if r1 != r2 {
 		printHeader()
 		fmt.Printf("  Response: \033[31m%s\033[0m -> \033[32m%s\033[0m\n", truncate(r1), truncate(r2))
+		diffFound = true
 	}
+	return diffFound
 }
 
 func truncate(s string) string {

@@ -43,6 +43,7 @@ type HTTPInterceptor struct {
 	IgnoreHeaders     []string
 	IgnoreQueryParams []string
 	usedSteps         map[int]bool // Keep track of which steps have been matched
+	NetworkCallCount  int
 	mu                sync.Mutex
 }
 
@@ -97,6 +98,7 @@ func (i *HTTPInterceptor) recordRoundTrip(req *http.Request) (*http.Response, er
 	}
 
 	i.mu.Lock()
+	i.NetworkCallCount++
 	defer i.mu.Unlock()
 
 	// Record step
@@ -126,7 +128,6 @@ func (i *HTTPInterceptor) recordRoundTrip(req *http.Request) (*http.Response, er
 
 func (i *HTTPInterceptor) replayRoundTrip(req *http.Request) (*http.Response, error) {
 	i.mu.Lock()
-	defer i.mu.Unlock()
 
 	// Read incoming request body
 	var incomingReqBodyBytes []byte
@@ -160,6 +161,7 @@ func (i *HTTPInterceptor) replayRoundTrip(req *http.Request) (*http.Response, er
 			fmt.Printf("%s[REPLAY] Matched request: %s %s%s\n", colorGreen, req.Method, req.URL.String(), colorReset)
 			fmt.Printf("         Returning recorded response (Run: %s, Step: %d)\n", i.CurrentRun.RunID, idx)
 
+			i.mu.Unlock()
 			return &http.Response{
 				StatusCode: recordedResp.StatusCode,
 				Status:     recordedResp.Status,
@@ -175,10 +177,13 @@ func (i *HTTPInterceptor) replayRoundTrip(req *http.Request) (*http.Response, er
 
 	if i.Fallback {
 		fmt.Printf("%s[REPLAY] No match found for %s %s. Falling back to real network.%s\n", colorYellow, req.Method, req.URL.String(), colorReset)
+		i.NetworkCallCount++
+		i.mu.Unlock()
 		return i.Transport.RoundTrip(req)
 	}
 
 	fmt.Printf("%s[REPLAY] ERROR: No matching recorded step found for %s %s%s\n", colorRed, req.Method, req.URL.String(), colorReset)
+	i.mu.Unlock()
 	return nil, fmt.Errorf("replay error: no matching recorded step found for request %s %s", req.Method, req.URL.String())
 }
 

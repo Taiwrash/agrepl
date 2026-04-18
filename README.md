@@ -52,6 +52,8 @@ agrepl share run-001
 Logging tells you what happened. **Replay lets you re-live it.** 
 Traditional tracing tools show you a post-mortem. `agrepl` provides a live, interactive environment where your code *thinks* it's talking to the real world, but it's actually talking to a deterministic local cache.
 
+**See how we compare to LangSmith, VCR.py, and more: [agrepl vs. The Orbit](https://agrepl.dev/compare)**
+
 ## Roadmap
 
 - [x] Basic CLI (record, replay, list, diff)

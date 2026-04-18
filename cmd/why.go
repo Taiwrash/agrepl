@@ -43,8 +43,10 @@ var whyCmd = &cobra.Command{
 		fmt.Println("3. \033[1mFull System Capture\033[0m: HTTP, APIs, and LLM calls in one unified run.")
 		fmt.Println("4. \033[1mPortable Truth\033[0m: share -> pull -> replay. Debug across machines.")
 
+		fmt.Println("\nFor a tool-by-tool matrix, run: \033[1magrepl compare\033[0m")
+
 		fmt.Println("\n\033[90mStop chasing ghosts. Replay them.\033[0m")
-		fmt.Println("\033[4mhttps://agrepl.dev\033[0m")
+		fmt.Println("\033[4mhttps://agrepl.dev/compare\033[0m")
 	},
 }
 

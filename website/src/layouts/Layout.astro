@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -12,7 +13,7 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Deterministic Replay for AI Agents" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}/favicon.svg`} />
+		<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
@@ -23,14 +24,14 @@ const { title } = Astro.props;
 		<div class="bg-glow"></div>
 		<nav>
 			<div class="container">
-				<a href={import.meta.env.BASE_URL} class="logo">
+				<a href={base || '/'} class="logo">
 					<span class="logo-icon"></span>
 					agrepl
 				</a>
 				<div class="links">
-					<a href={`${import.meta.env.BASE_URL}/docs/introduction`}>Docs</a>
-					<a href={`${import.meta.env.BASE_URL}/pricing`}>Pricing</a>
-					<a href={`${import.meta.env.BASE_URL}/login`} class="login-btn">
+					<a href={`${base}/docs/introduction`}>Docs</a>
+					<a href={`${base}/pricing`}>Pricing</a>
+					<a href={`${base}/login`} class="login-btn">
 						Login
 					</a>
 					<a href="https://github.com/taiwrash/agrepl" target="_blank" class="github-link">
@@ -64,7 +65,7 @@ const { title } = Astro.props;
 					</div>
 					<div class="footer-right">
 						<div class="footer-nav">
-							<a href={`${import.meta.env.BASE_URL}/docs/introduction`}>Docs</a>
+							<a href={`${base}/docs/introduction`}>Docs</a>
 							<a href="https://github.com/taiwrash/agrepl" target="_blank">GitHub</a>
 							<a href="#">Discord</a>
 						</div>

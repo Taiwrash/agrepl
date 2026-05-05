@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title="Pricing - agrepl">
@@ -27,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
 						<li>• Local JSON Storage</li>
 						<li>• Community Support</li>
 					</ul>
-					<a href={`${import.meta.env.BASE_URL}/docs/getting-started`} class="btn secondary">Install CLI</a>
+					<a href={`${base}/docs/getting-started`} class="btn secondary">Install CLI</a>
 				</div>
 
 				<!-- Pro Tier (Full Reliability Suite) -->
@@ -46,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
 						<li>• <strong>Golden Runs:</strong> Ground-truth management</li>
 						<li>• Priority Support</li>
 					</ul>
-					<a href={`${import.meta.env.BASE_URL}/login`} class="btn primary">Start Free Trial</a>
+					<a href={`${base}/login`} class="btn primary">Start Free Trial</a>
 				</div>
 
 				<!-- Enterprise Tier -->
@@ -64,7 +65,7 @@ import Layout from '../layouts/Layout.astro';
 						<li>• SSO & RBAC</li>
 						<li>• Custom SLA & Support</li>
 					</ul>
-					<a href={`${import.meta.env.BASE_URL}/login`} class="btn secondary">Contact Sales</a>
+					<a href={`${base}/login`} class="btn secondary">Contact Sales</a>
 				</div>
 			</div>
 		</div>

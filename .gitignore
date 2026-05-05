@@ -12,3 +12,5 @@ GO_TO_MARKET.md
 
 # Go dependencies (optional but common)
 # vendor/
+node_modules/
+website/node_modules/

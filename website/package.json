@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-types": "wrangler types"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,12 @@
   },
   "description": "",
   "dependencies": {
+    "@astrojs/cloudflare": "^13.3.1",
     "@astrojs/mdx": "^5.0.3",
-    "astro": "^6.1.7"
+    "astro": "^6.1.7",
+    "wrangler": "^4.87.0"
+  },
+  "overrides": {
+    "vite": "^7"
   }
 }

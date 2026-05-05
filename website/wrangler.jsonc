@@ -1,0 +1,7 @@
+{
+    "name": "agrepl",
+    "compatibility_date": "2026-05-05", // Update to the day you deploy
+    "assets": {
+        "directory": "./dist",
+    }
+}

@@ -3,9 +3,10 @@ import mdx from '@astrojs/mdx';
 
 
 
-// https://astro.build/config
-export default defineConfig({
-  site: 'https://agrepl.pages.dev',
+const isGitHub = process.env.GITHUB_ACTIONS === 'true';
 
+export default defineConfig({
+  site: isGitHub ? 'https://taiwrash.github.io' : 'https://agrepl.pages.dev',
+  base: isGitHub ? '/agrepl' : '/',
   integrations: [mdx()]
 });

@@ -93,6 +93,9 @@ LLM calls and HTTP requests/responses. The execution trace is stored locally.`,
 		execCmd.Env = append(execCmd.Env, "AGREPL_MODE=record")
 		execCmd.Env = append(execCmd.Env, "AGREPL_RUN_ID="+runID)
 
+		// Execute the command
+		err = execCmd.Run()
+
 		// Attempt to save the run, even if the command failed or was interrupted.
 		// This ensures partial runs are saved.
 		var saveErr error

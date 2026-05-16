@@ -60,6 +60,9 @@ LLM calls and HTTP requests/responses. The execution trace is stored locally.`,
 			}
 		}()
 
+		// Give the proxy a moment to start
+		time.Sleep(100 * time.Millisecond)
+
 		// Prepare command to execute
 		commandToExecute := args[0]
 		commandArgs := args[1:]
@@ -96,47 +99,36 @@ LLM calls and HTTP requests/responses. The execution trace is stored locally.`,
 		// Execute the command
 		err = execCmd.Run()
 
-		// Attempt to save the run, even if the command failed or was interrupted.
-		// This ensures partial runs are saved.
-		var saveErr error
-		if saveErr = s.SaveRun(currentRun); saveErr != nil { // Assign to existing saveErr
-			fmt.Fprintf(os.Stderr, "\033[31mError saving recorded run (possibly partial): %v\033[0m\n", saveErr)
+		// Reload the run from storage to get the full picture (including LLM calls from child)
+		finalRun, loadErr := s.LoadRun(runID)
+		if loadErr != nil {
+			// If it doesn't exist, use the one we have in memory
+			finalRun = currentRun
 		}
 
-		// Retrieve the run ID. It might be set by LLM interception or be the initial runID.
-		// This must be done before db.SaveMetadata and the final print statement.
-		finalRunID := os.Getenv("AGREPL_CURRENT_RUN_ID")
-		if finalRunID == "" {
-			finalRunID = runID // Fallback to the initially generated ID
-		}
-		currentRun.RunID = finalRunID // Update currentRun's ID to the final one
-
-		// Attempt to update SQLite index with metadata for the run (partial or complete)
+		// Update SQLite index with metadata
 		if db, dbErr := storage.NewDB("."); dbErr == nil {
 			defer db.Close()
 			status := "completed"
 			commandExecuted := commandToExecute + " " + strings.Join(commandArgs, " ")
-			if err != nil { // If execCmd.Run() had an error
+			if err != nil {
 				status = "failed"
 			}
 			db.SaveMetadata(&storage.RunMetadata{
-				RunID:      finalRunID, // Use finalRunID here
+				RunID:      runID,
 				Command:    commandExecuted,
 				CreatedAt:  time.Now(),
-				TotalSteps: len(currentRun.Steps),
+				TotalSteps: len(finalRun.Steps),
 				Status:     status,
 			})
-		} else {
-			fmt.Fprintf(os.Stderr, "\033[31mError initializing DB for metadata update: %v\033[0m\n", dbErr)
 		}
 
-		// Now handle the error from execCmd.Run() if it occurred
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mError executing command: %v\033[0m\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("\033[32m[RECORD] Recorded run with ID: %s. Total steps: %d\033[0m\n", finalRunID, len(currentRun.Steps))
+		fmt.Printf("\033[32m[RECORD] Recorded run with ID: %s. Total steps: %d\033[0m\n", runID, len(finalRun.Steps))
 	},
 }
 

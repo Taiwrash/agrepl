@@ -1,15 +1,21 @@
 ---
-import Layout from '../layouts/Layout.astro';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+import Layout from "../layouts/Layout.astro";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <Layout title="agrepl - Debug AI agents with deterministic replay">
 	<section class="hero">
 		<div class="container">
 			<div class="badge">Local-First, Privacy-Locked Open Source</div>
-			<h1>Debug AI agents with <br/><span class="white-glow">deterministic replay</span></h1>
-			<p class="tagline">Record LLM and API interactions. Replay them offline with zero network calls. Reproduce any agent run instantly.</p>
-			
+			<h1>
+				Debug AI agents with <br /><span class="white-glow"
+					>deterministic replay</span>
+			</h1>
+			<p class="tagline">
+				Record LLM and API interactions. Replay them offline with zero
+				network calls. Reproduce any agent run instantly.
+			</p>
+
 			<div class="value-bullets">
 				<span>• Reproduce any agent run</span>
 				<span>• Debug without hitting APIs</span>
@@ -17,10 +23,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 			</div>
 
 			<div class="ctas">
-				<a href={`${base}/docs/getting-started`} class="btn primary">Get Started (30s)</a>
+				<a href={`${base}/docs/getting-started`} class="btn primary"
+					>Get Started (30s)</a
+				>
 				<a href={`${base}/compare`} class="btn secondary">Compare</a>
 				<a href={`${base}/pricing`} class="btn secondary">Pricing</a>
-				<a href={`${base}/docs/introduction`} class="btn secondary">View Docs</a>
+				<a href={`${base}/docs/introduction`} class="btn secondary"
+					>View Docs</a
+				>
 			</div>
 		</div>
 	</section>
@@ -36,7 +46,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 							<span class="dot white muted"></span>
 							<span class="dot white muted"></span>
 						</div>
-						<div class="terminal-title">agrepl — deterministic replay</div>
+						<div class="terminal-title">
+							agrepl — deterministic replay
+						</div>
 						<button id="run-button" class="run-btn">
 							<span class="play-icon"></span>
 							Run Simulation
@@ -54,22 +66,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		<div class="container">
 			<div class="section-header">
 				<h2 class="section-title">Replay, don't just observe.</h2>
-				<p class="section-tagline">Three steps to deterministic debugging.</p>
+				<p class="section-tagline">
+					Three steps to deterministic debugging.
+				</p>
 			</div>
-			
+
 			<div class="flow-container">
 				<div class="flow-line"></div>
-				
+
 				<div class="flow-step staggered">
 					<div class="step-content">
 						<div class="step-badge">Phase 01</div>
 						<h4>Capture the behavior</h4>
-						<p>Wrap any CLI command with <code>agrepl record</code>. It acts as a local bridge, intercepting LLM calls and tool interactions in real-time.</p>
+						<p>
+							Wrap any CLI command with <code>agrepl record</code
+							>. It acts as a local bridge, intercepting LLM calls
+							and tool interactions in real-time.
+						</p>
 						<div class="code-window">
 							<div class="window-dot red"></div>
 							<div class="window-dot yellow"></div>
 							<div class="window-dot green"></div>
-							<div class="code-content">agrepl record -- python agent.py</div>
+							<div class="code-content">
+								agrepl record -- python agent.py
+							</div>
 						</div>
 					</div>
 					<div class="step-visual">
@@ -82,7 +102,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 					<div class="step-content">
 						<div class="step-badge">Phase 02</div>
 						<h4>Serve from the trace</h4>
-						<p>Re-run instantly with <code>agrepl run</code>. Your agent thinks it's talking to the world, but it's actually pulling from a local, immutable JSON trace.</p>
+						<p>
+							Re-run instantly with <code>agrepl run</code>. Your
+							agent thinks it's talking to the world, but it's
+							actually pulling from a local, immutable JSON trace.
+						</p>
 						<div class="code-window">
 							<div class="window-dot red"></div>
 							<div class="window-dot yellow"></div>
@@ -104,7 +128,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 					<div class="step-content">
 						<div class="step-badge">Phase 03</div>
 						<h4>Debug offline</h4>
-						<p>Fix code, tweak prompts, and re-test instantly. No network latency, no API costs, and 100% reproducibility.</p>
+						<p>
+							Fix code, tweak prompts, and re-test instantly. No
+							network latency, no API costs, and 100%
+							reproducibility.
+						</p>
 						<div class="status-indicator-alt">
 							<span class="pulse-dot"></span>
 							Network Isolated
@@ -124,7 +152,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		<div class="container">
 			<div class="section-header">
 				<h2 class="section-title">Beyond Observability.</h2>
-				<p class="section-tagline">Stop watching bugs. Start reproducing them.</p>
+				<p class="section-tagline">
+					Stop watching bugs. Start reproducing them.
+				</p>
 			</div>
 
 			<div class="comparison-grid">
@@ -182,21 +212,54 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><path
+									d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"
+								></path><path d="M3 6h18"></path><path
+									d="M16 10a4 4 0 0 1-8 0"></path></svg
+							>
 						</div>
-						<h3>Burn code, <br/>not credits</h3>
-						<p>Iterate on reasoning loops without hitting Gemini or OpenAI for every minor fix. Replay the same LLM response while you perfect your tool-calling logic.</p>
+						<h3>Burn code, <br />not credits</h3>
+						<p>
+							Iterate on reasoning loops without hitting Gemini or
+							OpenAI for every minor fix. Replay the same LLM
+							response while you perfect your tool-calling logic.
+						</p>
 					</div>
 					<div class="card-bg-gradient green"></div>
 				</div>
-				
+
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/><path d="m9.05 14.57 2.12 2.12a2 2 0 0 0 2.83 0l4.24-4.24"/><path d="M7 10h.01"/><path d="M11 8h.01"/><path d="M15 10h.01"/></svg>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><path d="m12 14 4-4"></path><path
+									d="M3.34 19a10 10 0 1 1 17.32 0"
+								></path><path
+									d="m9.05 14.57 2.12 2.12a2 2 0 0 0 2.83 0l4.24-4.24"
+								></path><path d="M7 10h.01"></path><path
+									d="M11 8h.01"></path><path d="M15 10h.01"
+								></path></svg
+							>
 						</div>
-						<h3>Kill the <br/>stochasticity</h3>
-						<p>Stop chasing ghosts. When a test fails in CI, replay the exact run that broke. Determinism is the only way to build production-grade AI.</p>
+						<h3>Kill the <br />stochasticity</h3>
+						<p>
+							Stop chasing ghosts. When a test fails in CI, replay
+							the exact run that broke. Determinism is the only
+							way to build production-grade AI.
+						</p>
 					</div>
 					<div class="card-bg-gradient blue"></div>
 				</div>
@@ -204,10 +267,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				<div class="bento-card-glass spotlight">
 					<div class="card-inner">
 						<div class="icon-wrap">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+							<svg
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><path
+									d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"
+								></path></svg
+							>
 						</div>
-						<h3>Privacy-Locked <br/>by Default</h3>
-						<p>Sensitive PII and proprietary prompts never leave your local environment. agrepl is a tool for developers who take security seriously.</p>
+						<h3>Privacy-Locked <br />by Default</h3>
+						<p>
+							Sensitive PII and proprietary prompts never leave
+							your local environment. agrepl is a tool for
+							developers who take security seriously.
+						</p>
 					</div>
 					<div class="card-bg-gradient white"></div>
 				</div>
@@ -224,8 +301,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				"[INFO] Proxy server listening on :8000",
 				"[RECORD] Captured LLM: gemini-2.0-flash",
 				"[RECORD] Captured HTTP: GET https://api.github.com/repos/google/agrepl",
-				"[SUCCESS] 12 steps captured. Run ID: run-010"
-			]
+				"[SUCCESS] 12 steps captured. Run ID: run-010",
+			],
 		},
 		{
 			command: "agrepl run run-010",
@@ -238,30 +315,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				"✓ Replay complete",
 				"Steps: 12",
 				"Network calls: 0",
-				"Deterministic: yes"
-			]
-		}
+				"Deterministic: yes",
+			],
+		},
 	];
 
-	const terminalBody = document.getElementById('terminal-body');
-	const runButton = document.getElementById('run-button');
+	const terminalBody = document.getElementById("terminal-body");
+	const runButton = document.getElementById("run-button");
 	let isRunning = false;
 
-	async function typeLine(text, type = 'output', delay = 20) {
-		const line = document.createElement('div');
+	async function typeLine(text, type = "output", delay = 20) {
+		const line = document.createElement("div");
 		line.className = `line ${type}`;
-		if (type === 'prompt') {
+		if (type === "prompt") {
 			line.innerHTML = `<span class="prompt">$</span> <span class="command-text"></span>`;
 			terminalBody.appendChild(line);
-			const commandSpan = line.querySelector('.command-text');
+			const commandSpan = line.querySelector(".command-text");
 			for (let i = 0; i < text.length; i++) {
 				commandSpan.textContent += text[i];
-				await new Promise(r => setTimeout(r, delay));
+				await new Promise((r) => setTimeout(r, delay));
 			}
 		} else {
 			line.textContent = text;
 			terminalBody.appendChild(line);
-			await new Promise(r => setTimeout(r, delay * 2));
+			await new Promise((r) => setTimeout(r, delay * 2));
 		}
 		terminalBody.scrollTop = terminalBody.scrollHeight;
 	}
@@ -270,45 +347,47 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		if (isRunning) return;
 		isRunning = true;
 		runButton.disabled = true;
-		runButton.classList.add('loading');
-		terminalBody.innerHTML = '';
+		runButton.classList.add("loading");
+		terminalBody.innerHTML = "";
 
 		for (const step of script) {
-			await typeLine(step.command, 'prompt', 40);
-			await new Promise(r => setTimeout(r, 400));
+			await typeLine(step.command, "prompt", 40);
+			await new Promise((r) => setTimeout(r, 400));
 			for (const line of step.output) {
-				let type = 'info';
-				if (line.startsWith('[SUCCESS]')) type = 'success-text';
-				if (line.startsWith('[RECORD]') || line.startsWith('[REPLAY]')) type = 'accent-text';
+				let type = "info";
+				if (line.startsWith("[SUCCESS]")) type = "success-text";
+				if (line.startsWith("[RECORD]") || line.startsWith("[REPLAY]"))
+					type = "accent-text";
 				await typeLine(line, type, 10);
 			}
-			await new Promise(r => setTimeout(r, 1000));
+			await new Promise((r) => setTimeout(r, 1000));
 		}
 
-		await typeLine('', 'prompt', 0);
+		await typeLine("", "prompt", 0);
 		const finalLine = terminalBody.lastElementChild;
-		finalLine.querySelector('.command-text').innerHTML = '<span class="cursor"></span>';
-		
+		finalLine.querySelector(".command-text").innerHTML =
+			'<span class="cursor"></span>';
+
 		isRunning = false;
 		runButton.disabled = false;
-		runButton.classList.remove('loading');
+		runButton.classList.remove("loading");
 	}
 
-	runButton.addEventListener('click', runSimulation);
+	runButton.addEventListener("click", runSimulation);
 
 	// Spotlight Effect
-	document.querySelectorAll('.spotlight').forEach(card => {
-		card.addEventListener('mousemove', e => {
+	document.querySelectorAll(".spotlight").forEach((card) => {
+		card.addEventListener("mousemove", (e) => {
 			const rect = card.getBoundingClientRect();
 			const x = e.clientX - rect.left;
 			const y = e.clientY - rect.top;
-			card.style.setProperty('--mouse-x', `${x}px`);
-			card.style.setProperty('--mouse-y', `${y}px`);
+			card.style.setProperty("--mouse-x", `${x}px`);
+			card.style.setProperty("--mouse-y", `${y}px`);
 		});
 	});
 
 	// Initial run
-	window.addEventListener('load', () => {
+	window.addEventListener("load", () => {
 		setTimeout(runSimulation, 1000);
 	});
 </script>
@@ -409,18 +488,33 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		min-height: 380px;
 	}
 	@keyframes float {
-		0%, 100% { transform: rotateX(8deg) rotateY(-6deg) translateY(0); }
-		50% { transform: rotateX(10deg) rotateY(-8deg) translateY(-15px); }
+		0%,
+		100% {
+			transform: rotateX(8deg) rotateY(-6deg) translateY(0);
+		}
+		50% {
+			transform: rotateX(10deg) rotateY(-8deg) translateY(-15px);
+		}
 	}
 
 	.scanline {
 		width: 100%;
 		height: 100%;
 		z-index: 10;
-		background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-		background-size: 100% 2px, 3px 100%;
+		background:
+			linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+			linear-gradient(
+				90deg,
+				rgba(255, 0, 0, 0.06),
+				rgba(0, 255, 0, 0.02),
+				rgba(0, 0, 255, 0.06)
+			);
+		background-size:
+			100% 2px,
+			3px 100%;
 		position: absolute;
-		top: 0; left: 0;
+		top: 0;
+		left: 0;
 		pointer-events: none;
 		opacity: 0.1;
 	}
@@ -445,12 +539,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		border-radius: 0;
 		background: #fff;
 	}
-	.dot.muted { opacity: 0.15; }
-	
+	.dot.muted {
+		opacity: 0.15;
+	}
+
 	.terminal-title {
 		font-size: 0.75rem;
 		color: #555;
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 	}
@@ -460,7 +556,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		color: #fff;
 		padding: 0.4rem 0.8rem;
 		border-radius: 0;
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		font-size: 0.7rem;
 		cursor: pointer;
 		display: flex;
@@ -481,21 +577,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 	.terminal-body {
 		padding: 2.5rem;
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		font-size: 0.9rem;
 		line-height: 1.6;
 		color: #a1a1aa;
 		overflow-x: auto;
 	}
-	.line { margin-bottom: 0.4rem; }
+	.line {
+		margin-bottom: 0.4rem;
+	}
 	.prompt {
 		color: #fff;
 		font-weight: 700;
 		margin-right: 0.8rem;
 	}
-	.info { color: #52525b; }
-	.success-text { color: #fff; font-weight: 600; }
-	.accent-text { color: #d4d4d8; }
+	.info {
+		color: #52525b;
+	}
+	.success-text {
+		color: #fff;
+		font-weight: 600;
+	}
+	.accent-text {
+		color: #d4d4d8;
+	}
 	.cursor {
 		display: inline-block;
 		width: 8px;
@@ -506,8 +611,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		animation: blink 1s infinite;
 	}
 	@keyframes blink {
-		0%, 100% { opacity: 1; }
-		50% { opacity: 0; }
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0;
+		}
 	}
 
 	.how-it-works {
@@ -532,9 +642,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	}
 	.flow-line {
 		position: absolute;
-		top: 0; left: 50%;
-		width: 1px; height: 100%;
-		background: linear-gradient(to bottom, transparent, var(--border), var(--border), transparent);
+		top: 0;
+		left: 50%;
+		width: 1px;
+		height: 100%;
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			var(--border),
+			var(--border),
+			transparent
+		);
 		z-index: 0;
 	}
 	.flow-step {
@@ -563,7 +681,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		background: rgba(255, 255, 255, 0.05);
 		padding: 0.3rem 0.8rem;
 		border-radius: 0;
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		font-size: 0.7rem;
 		color: #fff;
 		margin-bottom: 1.5rem;
@@ -586,54 +704,72 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		border-radius: 0;
 		padding: 1.25rem;
 		position: relative;
-		box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 	}
 	.window-dot {
-		width: 8px; height: 8px;
+		width: 8px;
+		height: 8px;
 		border-radius: 0;
 		display: inline-block;
 		margin-right: 4px;
 		margin-bottom: 1rem;
 	}
-	.window-dot.red { background: #ff5f56; }
-	.window-dot.yellow { background: #ffbd2e; }
-	.window-dot.green { background: #27c93f; }
+	.window-dot.red {
+		background: #ff5f56;
+	}
+	.window-dot.yellow {
+		background: #ffbd2e;
+	}
+	.window-dot.green {
+		background: #27c93f;
+	}
 	.code-content {
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		font-size: 0.8rem;
 		color: #fff;
 	}
 
 	/* Visual Elements */
 	.pulse-circle {
-		width: 60px; height: 60px;
+		width: 60px;
+		height: 60px;
 		background: #fff;
 		border-radius: 0;
 		box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
 	}
 	.pulse-ring {
 		position: absolute;
-		width: 100px; height: 100px;
+		width: 100px;
+		height: 100px;
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 50%;
 		animation: ringPulse 2s infinite;
 	}
 	@keyframes ringPulse {
-		0% { transform: scale(1); opacity: 0.5; }
-		100% { transform: scale(2); opacity: 0; }
+		0% {
+			transform: scale(1);
+			opacity: 0.5;
+		}
+		100% {
+			transform: scale(2);
+			opacity: 0;
+		}
 	}
 
 	.lock-icon-visual {
-		width: 80px; height: 100px;
-		display: flex; flex-direction: column; align-items: center;
+		width: 80px;
+		height: 100px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		position: relative;
 	}
-	.lock-body { 
-		width: 60px; 
-		height: 45px; 
-		background: #18181b; 
+	.lock-body {
+		width: 60px;
+		height: 45px;
+		background: #18181b;
 		border: 1px solid var(--border);
-		border-radius: 0; 
+		border-radius: 0;
 		position: relative;
 		overflow: hidden;
 		box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
@@ -644,48 +780,86 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1), transparent);
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			rgba(255, 255, 255, 0.1),
+			transparent
+		);
 		animation: lockScan 2s infinite ease-in-out;
 	}
 	@keyframes lockScan {
-		0% { top: -100%; }
-		50% { top: 100%; }
-		100% { top: 100%; }
+		0% {
+			top: -100%;
+		}
+		50% {
+			top: 100%;
+		}
+		100% {
+			top: 100%;
+		}
 	}
-	.lock-shackle { 
-		width: 32px; 
-		height: 35px; 
-		border: 4px solid #fff; 
-		border-bottom: none; 
-		border-radius: 16px 16px 0 0; 
-		margin-bottom: -4px; 
+	.lock-shackle {
+		width: 32px;
+		height: 35px;
+		border: 4px solid #fff;
+		border-bottom: none;
+		border-radius: 16px 16px 0 0;
+		margin-bottom: -4px;
 		transition: transform 0.3s;
 		animation: shackleLock 4s infinite ease-in-out;
 	}
 	@keyframes shackleLock {
-		0%, 100% { transform: translateY(0); }
-		50% { transform: translateY(8px); }
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(8px);
+		}
 	}
 
 	.offline-mesh {
-		display: flex; gap: 10px;
+		display: flex;
+		gap: 10px;
 	}
 	.offline-mesh span {
-		width: 12px; height: 40px; background: #fff; border-radius: 0;
+		width: 12px;
+		height: 40px;
+		background: #fff;
+		border-radius: 0;
 		animation: meshBounce 1.5s infinite ease-in-out;
 	}
-	.offline-mesh span:nth-child(2) { animation-delay: 0.2s; }
-	.offline-mesh span:nth-child(3) { animation-delay: 0.4s; }
+	.offline-mesh span:nth-child(2) {
+		animation-delay: 0.2s;
+	}
+	.offline-mesh span:nth-child(3) {
+		animation-delay: 0.4s;
+	}
 	@keyframes meshBounce {
-		0%, 100% { height: 40px; opacity: 1; }
-		50% { height: 20px; opacity: 0.3; }
+		0%,
+		100% {
+			height: 40px;
+			opacity: 1;
+		}
+		50% {
+			height: 20px;
+			opacity: 0.3;
+		}
 	}
 
 	.status-indicator-alt {
-		display: flex; align-items: center; gap: 0.6rem;
-		font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #fff;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-family: "JetBrains Mono", monospace;
+		font-size: 0.75rem;
+		color: #fff;
 	}
-	.pulse-dot { border-radius: 50%; animation: blink 1s infinite; }
+	.pulse-dot {
+		border-radius: 50%;
+		animation: blink 1s infinite;
+	}
 
 	/* Use Cases Creative */
 	.bento-grid-creative {
@@ -709,34 +883,71 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		border-color: rgba(255, 255, 255, 0.2);
 		background: rgba(255, 255, 255, 0.04);
 	}
-	.card-inner { position: relative; z-index: 2; }
+	.card-inner {
+		position: relative;
+		z-index: 2;
+	}
 	.icon-wrap {
-		width: 48px; height: 48px;
+		width: 48px;
+		height: 48px;
 		background: rgba(255, 255, 255, 0.03);
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		border-radius: 0;
-		display: flex; align-items: center; justify-content: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		margin-bottom: 2.5rem;
 		color: #fff;
-		box-shadow: inset 0 0 12px rgba(255,255,255,0.02);
+		box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.02);
 	}
-	.icon-wrap svg { width: 24px; height: 24px; }
+	.icon-wrap svg {
+		width: 24px;
+		height: 24px;
+	}
 	.bento-card-glass h3 {
-		font-size: 1.8rem; font-weight: 800; margin-bottom: 1.2rem; line-height: 1.1;
+		font-size: 1.8rem;
+		font-weight: 800;
+		margin-bottom: 1.2rem;
+		line-height: 1.1;
 	}
 	.bento-card-glass p {
-		color: var(--muted); line-height: 1.6; font-size: 0.95rem;
+		color: var(--muted);
+		line-height: 1.6;
+		font-size: 0.95rem;
 	}
 	.card-bg-gradient {
-		position: absolute; bottom: 0; right: 0;
-		width: 100%; height: 100%;
-		background: radial-gradient(circle at bottom right, rgba(255,255,255,0.05), transparent 60%);
-		z-index: 0; pointer-events: none;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background: radial-gradient(
+			circle at bottom right,
+			rgba(255, 255, 255, 0.05),
+			transparent 60%
+		);
+		z-index: 0;
+		pointer-events: none;
 	}
-	.card-bg-gradient.green { background: radial-gradient(circle at bottom right, rgba(39, 201, 63, 0.05), transparent 60%); }
-	.card-bg-gradient.blue { background: radial-gradient(circle at bottom right, rgba(0, 102, 255, 0.05), transparent 60%); }
+	.card-bg-gradient.green {
+		background: radial-gradient(
+			circle at bottom right,
+			rgba(39, 201, 63, 0.05),
+			transparent 60%
+		);
+	}
+	.card-bg-gradient.blue {
+		background: radial-gradient(
+			circle at bottom right,
+			rgba(0, 102, 255, 0.05),
+			transparent 60%
+		);
+	}
 
-	.section-title.small { font-size: 2.2rem; text-align: center; }
+	.section-title.small {
+		font-size: 2.2rem;
+		text-align: center;
+	}
 
 	.comparison-section {
 		padding: 10rem 0;
@@ -758,18 +969,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	.comparison-card.highlighted {
 		background: rgba(255, 255, 255, 0.05);
 		border-color: #fff;
-		box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 	}
 	.card-type {
-		font-family: 'JetBrains Mono', monospace;
+		font-family: "JetBrains Mono", monospace;
 		font-size: 0.75rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		margin-bottom: 2rem;
 		color: var(--muted);
 	}
-	.comparison-card.highlighted .card-type { color: #fff; }
-	.comparison-card ul { list-style: none; }
+	.comparison-card.highlighted .card-type {
+		color: #fff;
+	}
+	.comparison-card ul {
+		list-style: none;
+	}
 	.comparison-card li {
 		display: flex;
 		align-items: center;
@@ -777,31 +992,65 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 		margin-bottom: 1.2rem;
 		font-size: 0.95rem;
 	}
-	.cross { color: #ff5f56; font-weight: bold; }
-	.check { color: #27c93f; font-weight: bold; }
+	.cross {
+		color: #ff5f56;
+		font-weight: bold;
+	}
+	.check {
+		color: #27c93f;
+		font-weight: bold;
+	}
 
 	@media (max-width: 900px) {
-		.hero { padding: 6rem 0 3rem; }
-		h1 { font-size: 2.5rem; }
-		.ctas { flex-direction: column; }
-		.flow-step, .flow-step.reverse { flex-direction: column; gap: 3rem; text-align: center; margin-bottom: 6rem; }
-		.flow-line { display: none; }
-		.bento-grid-creative { grid-template-columns: 1fr; }
-		.comparison-grid { grid-template-columns: 1fr; padding: 0 1rem; }
-		.step-visual { order: -1; }
-		.glass-terminal { 
-			transform: none !important; 
-			animation: none; 
+		.hero {
+			padding: 6rem 0 3rem;
+		}
+		h1 {
+			font-size: 2.5rem;
+		}
+		.ctas {
+			flex-direction: column;
+		}
+		.flow-step,
+		.flow-step.reverse {
+			flex-direction: column;
+			gap: 3rem;
+			text-align: center;
+			margin-bottom: 6rem;
+		}
+		.flow-line {
+			display: none;
+		}
+		.bento-grid-creative {
+			grid-template-columns: 1fr;
+		}
+		.comparison-grid {
+			grid-template-columns: 1fr;
+			padding: 0 1rem;
+		}
+		.step-visual {
+			order: -1;
+		}
+		.glass-terminal {
+			transform: none !important;
+			animation: none;
 			min-height: auto;
 		}
-		.value-bullets { flex-direction: column; gap: 1rem; }
-		.how-it-works { padding: 6rem 0; }
-		.comparison-section { padding: 6rem 0; }
+		.value-bullets {
+			flex-direction: column;
+			gap: 1rem;
+		}
+		.how-it-works {
+			padding: 6rem 0;
+		}
+		.comparison-section {
+			padding: 6rem 0;
+		}
 	}
 	.bento-card-glass:hover .icon-wrap {
 		color: #fff;
-		border-color: rgba(255,255,255,0.3);
-		background: rgba(255,255,255,0.1);
+		border-color: rgba(255, 255, 255, 0.3);
+		background: rgba(255, 255, 255, 0.1);
 	}
 
 	@media (max-width: 600px) {
@@ -814,17 +1063,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 			padding: 1rem;
 			font-size: 0.75rem;
 		}
-		.dots { display: none; }
+		.dots {
+			display: none;
+		}
 	}
 </style>
-
-
-
-
-
-style>
-
-
-
-
-

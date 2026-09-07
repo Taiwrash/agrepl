@@ -29,7 +29,7 @@ var compareCmd = &cobra.Command{
 		fmt.Println("\033[36m2. vs. VCR.py:\033[0m Mocking is for units; agrepl is for \033[32magent journeys\033[0m.")
 		fmt.Println("\033[36m3. vs. Replay.io:\033[0m Program replay is heavy; agrepl is \033[32mAPI-semantic replay\033[0m.")
 
-		fmt.Println("\nFor a deep dive, visit: \033[4mhttps://agrepl.dev/compare\033[0m")
+		fmt.Println("\nFor a deep dive, visit: \033[4mhttps://agrepl.taiwrash.xyz/compare\033[0m")
 	},
 }
 

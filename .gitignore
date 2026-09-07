@@ -1,4 +1,3 @@
-
 # Binary
 agrepl
 
@@ -10,8 +9,15 @@ GO_TO_MARKET.md
 # OS files
 .DS_Store
 
-# Go dependencies (optional but common)
-# vendor/
+# Go
+vendor/
+
+# Node / Astro / Website
 node_modules/
-website/node_modules/website/.wrangler/
+website/node_modules/
+website/.astro/
+website/.wrangler/
 website/dist/
+dist/
+.wrangler/
+*.log

@@ -46,7 +46,7 @@ var whyCmd = &cobra.Command{
 		fmt.Println("\nFor a tool-by-tool matrix, run: \033[1magrepl compare\033[0m")
 
 		fmt.Println("\n\033[90mStop chasing ghosts. Replay them.\033[0m")
-		fmt.Println("\033[4mhttps://agrepl.dev/compare\033[0m")
+		fmt.Println("\033[4mhttps://agrepl.taiwrash.xyz/compare\033[0m")
 	},
 }
 
